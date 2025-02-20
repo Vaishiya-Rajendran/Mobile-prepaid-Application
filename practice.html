@@ -1,0 +1,210 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background-color: #eef5ff;
+            padding-top: 70px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .navbar {
+            background: linear-gradient(90deg, #007bff, #0056b3) !important;
+        }
+        .nav-link, .navbar-brand {
+            color: white !important;
+        }
+        .container h5 {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #0056b3;
+        }
+        .card {
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        footer {
+            background: linear-gradient(90deg, #007bff, #0056b3);
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="mobile2.jpg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                <span style="color: gold; font-weight: bold;">Mobi.Comm</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="notification.html">
+                            <i class="bi bi-bell fs-3 text-light"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fs-3 text-light"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="profile management.html">Manage Profile</a></li>
+                            <li><a class="dropdown-item" href="viewplan.html">My Plans</a></li>
+                            <li><a class="dropdown-item" href="availableplan.html">Check Plans</a></li>
+                            <li><a class="dropdown-item" href="rechargehistory.html">Recharge History</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="index.html" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card p-3">
+                    <h5>Account Details</h5>
+                    <hr>
+                    <p><strong>User Name:</strong> Vaishiya</p>
+                    <p><strong>Mobile Number:</strong> +91 9876543210</p>
+                    <p><strong>Plan Validity:</strong> 28 Days</p>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card p-3 mb-4">
+                    <h5>Data Usage</h5>
+                    <hr>
+                    <p><strong>1.35GB</strong> out of 1.5GB</p>
+                    <p><strong>Used Data:</strong> 150 MB</p>
+                    <p>Renews in <b>12 Hours</b></p>
+                    <a href="availableplan.html" class="btn btn-primary mx-auto w-50">Add Data</a>
+                </div>
+                <div class="card p-3">
+                    <h5>Plan Details</h5>
+                    <hr>
+                    <p><strong>Active Plan:</strong> ₹299 - 1.5GB/day</p>
+                    <p><strong>Validity:</strong> 28 Days</p>
+                    <a href="viewplan.html" class="btn btn-primary mx-auto w-50">View Plan</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Mobi.Comm. All rights reserved.</p>
+    </footer>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Usage</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 70px;
+        }
+        .navbar {
+            background-color: #1a237e !important;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .card {
+            border-radius: 10px;
+            background-color: #e3f2fd;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h5 {
+            font-weight: bold;
+            color: #1a237e;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Mobi.Comm</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h3 class="text-center mb-4">My Usage</h3>
+        <div class="row mb-3">
+            <div class="col-md-4 offset-md-4">
+                <select class="form-select" id="filter">
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card p-3">
+                    <h5>Data Usage</h5>
+                    <hr>
+                    <p><strong>1.2GB</strong> used today</p>
+                    <p><strong>8.5GB</strong> used this week</p>
+                    <p><strong>32GB</strong> used this month</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card p-3">
+                    <h5>SMS Usage</h5>
+                    <hr>
+                    <p><strong>5</strong> SMS sent today</p>
+                    <p><strong>30</strong> SMS sent this week</p>
+                    <p><strong>120</strong> SMS sent this month</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card p-3">
+                    <h5>Call Usage</h5>
+                    <hr>
+                    <p><strong>15 min</strong> talk time today</p>
+                    <p><strong>120 min</strong> talk time this week</p>
+                    <p><strong>480 min</strong> talk time this month</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("filter").addEventListener("change", function() {
+            alert("Filtering data based on: " + this.value);
+        });
+    </script>
+</body>
+</html>

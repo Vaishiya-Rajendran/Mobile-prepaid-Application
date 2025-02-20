@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Plans</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+         body {
+            background-color: #f8f9fa;
+            padding-top: 70px;
+        }
+        .navbar {
+            background-color: rgb(50, 27, 200) !important;
+        }
+        .nav-link, .navbar-brand {
+            color: white !important;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .search-container {
+            margin-bottom: 30px;
+        }
+        .card-body {
+            text-align: center;
+        }
+        .plan-item {
+            margin-bottom: 20px; 
+        }
+        #noResults {
+            display: none;
+            text-align: center;
+            font-size: 18px;
+            color: red;
+            margin-top: 20px;
+        }
+        .icon-circle {
+        width: 40px; 
+        height: 40px; 
+        background-color: gold; /* Gold background */
+        color: black !important; /* Black icon color */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%; /* Makes it a circle */
+        text-decoration: none; /* Removes underline */
+        font-size: 20px;
+    }
+        footer{
+            text-align: center;
+            background-color:rgb(50, 27, 200) ;
+            margin: 10px;
+            padding: 10px;
+            color: white;
+            background-color: #6c757d !important; /* Bootstrap secondary grey */
+  
+        }
+        .dropdown-toggle::after {
+        display: none !important;
+    }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+     <!-- Navbar -->
+     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="mobile2.jpg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+                <span style="color: gold;">Mobi.Comm</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav d-flex align-items-center">
+                    <!-- Notification Icon -->
+                    <li class="nav-item me-3">
+                        <a class="icon-circle" href="notification.html">
+                            <i class="bi bi-bell"></i>
+                        </a>
+                    </li>
+    
+                    <!-- Profile Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="icon-circle">
+                                <i class="bi bi-person"></i>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="profile management.html">Manage Profile</a></li>
+                            <li><a class="dropdown-item" href="viewplan.html">My Plans</a></li>
+                            <li><a class="dropdown-item" href="availableplan.html">Check Plans</a></li>
+                            <li><a class="dropdown-item" href="rechargehistory.html">Recharge History</a></li>
+                            <li><a class="dropdown-item" href="#">My Usage</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="index.html" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Plans Section -->
+    <div class="container search-container">
+        <br>
+        <h3>Search Available Plans</h3>
+        <input type="text" class="form-control" id="planSearch" placeholder="Search for plans..." onkeyup="searchPlans()">
+    </div>
+
+    <!-- Available Plans Section -->
+    <div class="container">
+        <div class="row" id="plansContainer">
+            <!-- Plan 1 -->
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><b>₹299</b> - Validity 28 Days</h5> 
+                        <p class="card-text"> <b>1.5 GB </b> per day </p>
+                        <p><b>100 SMS </b>/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹ 299', 'Unlimited Calls + 1.5 GB/Day + 28 Days Validity')">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Plan 2 -->
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><b>₹3599</b> - Validity 365 Days</h5>
+                        <p class="card-text"> 2 GB data per day </p>
+                        <p>100 SMS/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹ 3599', 'Unlimited Calls + 2 GB/Day + 365 Days Validity')">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹349 True 5G Unlimited Plan</h5>
+                        <p class="card-text"> 2GB data per day</p>
+                        <p>100 SMS/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹ 349 True 5G', 'Unlimited Calls + 2 GB/Day + 28 Days Validity')">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><b>₹859 - Plan</b> Validity 84 Days</h5>
+                        <p class="card-text"> 2 GB data per day </p>
+                        <p>100 SMS/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹859', 'Unlimited Calls + 2 GB/Day + 84 Days Validity')">Recharge Now</a>
+                     </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹799 - Validity 84 Days</h5>
+                        <p class="card-text"> 1.5 GB data per day</p>
+                        <p>100 SMS/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹799', 'Unlimited Calls + 1.5 GB/Day + 84 Days Validity')">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹149 - 20 Days</h5>
+                        <p class="card-text"> 1 GB data per day</p>
+                        <p>100 SMS/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹149', 'Unlimited Calls + 1 GB/Day + 20 Days Validity')">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹129 - Validity 14 Days</h5>
+                        <p class="card-text"> 500 MB data per day</p>
+                        <p>100 SMS/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹129', 'Unlimited Calls + 100 MB/Day + 14 Days Validity')">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹399 - Validity 28 Days</h5>
+                        <p class="card-text"> 3 GB data per day</p>
+                        <p>100 SMS/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹399', 'Unlimited Calls + 3 GB/Day + 28 Days Validity')">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹599 - Validity 56 Days</h5>
+                        <p class="card-text"> 2 GB data per day</p>
+                        <p>100 SMS/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹599', 'Unlimited Calls + 2 GB/Day + 56 Days Validity')">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹1499 - Validity 180 Days</h5>
+                        <p class="card-text"> 2 GB data per day</p>
+                        <p>100 SMS/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹1499', 'Unlimited Calls + 2 GB/Day + 180 Days Validity')">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹249 - Validity 21 Days</h5>
+                        <p class="card-text"> 2 GB data per day</p>
+                        <p>100 SMS/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹249', 'Unlimited Calls + 2 GB/Day + 21 Days Validity')">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹799 - Validity 84 Days</h5>
+                        <p class="card-text"> 1.5 GB data per day</p>
+                        <p>100 SMS/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹799', 'Unlimited Calls + 1.5 GB/Day + 84 Days Validity')">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹999 - Validity 90 Days</h5>
+                        <p class="card-text"> 2 GB data per day</p>
+                        <p>100 SMS/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹999', 'Unlimited Calls + 2 GB/Day + 90 Days Validity')">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹2199 - Validity 240 Days</h5>
+                        <p class="card-text"> 3 GB data per day</p>
+                        <p>100 SMS/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹ 2199', 'Unlimited Calls + 3 GB/Day + 240 Days Validity')">Recharge Now</a>
+                   </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹1599 - Validity 180 Days</h5>
+                        <p class="card-text"> 2.5 GB data per day</p>
+                        <p>100 SMS/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹ 1599', 'Unlimited Calls + 2.5 GB/Day + 180 Days Validity')">Recharge Now</a>
+                   </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹799 - Validity 60 Days</h5>
+                        <p class="card-text"> 3 GB data per day</p>
+                        <p>100 SMS/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹ 799', 'Unlimited Calls + 3 GB/Day + 60 Days Validity')">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹1999 - Validity 365 Days</h5>
+                        <p class="card-text"> 4 GB data per day</p>
+                        <p>100 SMS/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹ 1999', 'Unlimited Calls + 4 GB/Day + 365 Days Validity')">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 plan-item">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹499 - Validity 56 Days</h5>
+                        <p class="card-text"> 2.5 GB data per day</p>
+                        <p>100 SMS/day</p>
+                        <p><b>Unlimited calls </b></p>
+                        <a href="#" class="btn btn-primary" onclick="selectPlan('₹ 499', 'Unlimited Calls + 2.5 GB/Day + 56 Days Validity')">Recharge Now</a>
+                   </div>
+                </div>
+            </div>
+                        
+        </div>
+        
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-light bg-secondary mt-5 p-4"> <!-- Changed bg-dark to bg-secondary -->
+        <div class="container">
+            <div class="row">
+                <!-- Company Info -->
+                <div class="col-md-4">
+                    <h5>About Mobi.Comm</h5>
+                    <p>Mobi.Comm is a leading mobile service provider offering affordable plans with high-speed data, unlimited calls, and seamless connectivity across the country.</p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="aboutus.html" class="text-light">About Us</a></li>
+                        <li><a href="#" class="text-light">Help & Support</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Contact Information -->
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="bi bi-envelope-fill"></i> support@mobicomm.com</p>
+                    <p><i class="bi bi-telephone-fill"></i> +91 98765 43210</p>
+                    <p><i class="bi bi-geo-alt-fill"></i> Chennai, India</p>
+                    
+                    <!-- Social Media Links -->
+                    <div>
+                        <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Copyright -->
+            <div class="text-center mt-3">
+                <p>&copy; 2025 Mobi.Comm. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Search functionality for plans
+        function searchPlans() {
+            const query = document.getElementById("planSearch").value.toLowerCase();
+            const plans = document.querySelectorAll(".plan-item");
+            
+            plans.forEach(function(plan) {
+                const planTitle = plan.querySelector(".card-title").textContent.toLowerCase();
+                if (planTitle.includes(query)) {
+                    plan.style.display = "block";
+                } else {
+                    plan.style.display = "none";
+                }
+            });
+            document.getElementById("noResults").style.display = hasResults ? "none" : "block";
+        }
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+    <script>
+        function selectPlan(planId, planDetails) {
+            window.location.href = 'recharge.html?planId=' + planId + '&planDetails=' + encodeURIComponent(planDetails);
+        }
+    </script>
+</body>
+</html>

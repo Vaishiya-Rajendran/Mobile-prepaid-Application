@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Reports & Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .navbar {
+            background-color: rgb(50, 27, 200) !important;
+            color: white !important;
+            padding: 10px 20px;
+        }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: gold !important;
+        }
+        .profile-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background-color: gold;
+            border-radius: 50%;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .profile-icon i {
+            color: black !important;
+            font-size: 20px;
+        }
+        .dropdown-menu {
+            right: 0;
+            left: auto;
+        }
+        .chart-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h4 {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        footer{
+            text-align: center;
+            background-color:rgb(50, 27, 200) ;
+            margin: 10px;
+            padding: 10px;
+            color: white;
+            background-color: #6c757d !important; /* Bootstrap secondary grey */
+  
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <img src="mobile2.jpg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+            <a class="navbar-brand" style="color: gold;" href="#">Mobi.Comm</a>
+ 
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" id="dashboardDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="profile-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        </a>
+                        
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dashboardDropdown">
+                            <li><a class="dropdown-item" href="#user-management-container">Subscriber Management</a></li>
+                            <li><a class="dropdown-item" href="adminplanmanagement.html">Plan Management</a></li>
+                            <li><a class="dropdown-item" href="admintransaction.html">Transaction Management</a></li>
+                            <li><a class="dropdown-item" href="reportand analysis.html">Reports & Analytics</a></li>
+                            <li><a class="dropdown-item" href="adminnotification.html">Notifications</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="index.html" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Reports Section -->
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Reports & Analysis</h2>
+
+        <div class="row">
+            <div class="col-md-6 mx-auto chart-container">
+                <h4>Revenue Over the Last 7 Days</h4>
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mx-auto chart-container">
+                <h4>New Users Over the Last 7 Days</h4>
+                <canvas id="userChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <script>
+        function logout() {
+            const confirmation = confirm("Are you sure you want to logout?");
+            if (confirmation) {
+                alert("Logging out...");
+                window.location.href = 'customer login.html'; // Redirect to the login page
+            } else {
+                alert("Logout canceled.");
+            }
+        }
+    </script>
+    <!-- Chart Scripts -->
+    <script>
+        const labels = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        const revenueData = [500, 750, 620, 890, 1200, 950, 1100]; // Example revenue values
+        const userData = [10, 15, 12, 18, 22, 19, 25]; // Example new users per day
+
+        // Revenue Chart
+        new Chart(document.getElementById("revenueChart"), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Revenue ($)",
+                    data: revenueData,
+                    backgroundColor: "#007bff",
+                    borderColor: "#0056b3",
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // User Growth Chart
+        new Chart(document.getElementById("userChart"), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "New Users",
+                    data: userData,
+                    backgroundColor: "#28a745",
+                    borderColor: "#1e7e34",
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <footer class="text-light bg-secondary mt-5 p-4"> <!-- Changed bg-dark to bg-secondary -->
+        <div class="container">
+            <div class="row">
+                <!-- Company Info -->
+                <div class="col-md-4">
+                    <h5>About Mobi.Comm</h5>
+                    <p>Mobi.Comm is a leading mobile service provider offering affordable plans with high-speed data, unlimited calls, and seamless connectivity across the country.</p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="aboutus.html" class="text-light">About Us</a></li>
+                        <li><a href="#" class="text-light">Help & Support</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Contact Information -->
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="bi bi-envelope-fill"></i> support@mobicomm.com</p>
+                    <p><i class="bi bi-telephone-fill"></i> +91 98765 43210</p>
+                    <p><i class="bi bi-geo-alt-fill"></i> Chennai, India</p>
+                    
+                    <!-- Social Media Links -->
+                    <div>
+                        <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Copyright -->
+            <div class="text-center mt-3">
+                <p>&copy; 2025 Mobi.Comm. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

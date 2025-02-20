@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .profile-icon {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px; /* Adjust the size as needed */
+        height: 40px; /* Adjust the size as needed */
+        background-color: gold;
+        border-radius: 50%;
+    }
+
+    .profile-icon .fas {
+        color: black;
+        font-size: 20px; /* Adjust the size as needed */
+    }
+        .navbar {
+            width: 100%;
+            background-color: rgb(50, 27, 200) !important;
+            color: white !important;
+            border: 1px solid rgb(50, 27, 200);
+        }
+        .table {
+            background-color: #e3f2fd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table th {
+            background-color: #007bff !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        .table td, .table th {
+            border: 1px solid #131313;
+            text-align: center;
+        }
+        .download-btn {
+            margin: 20px 0;
+        }
+        footer{
+            text-align: center;
+            background-color:rgb(50, 27, 200) ;
+            margin: 10px;
+            padding: 10px;
+            color: white;
+            background-color: #6c757d !important; /* Bootstrap secondary grey */
+  
+        }
+        .nav-link, .navbar-brand {
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+     <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <img src="mobile2.jpg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+            <a class="navbar-brand" style="color: gold;" href="#">Mobi.Comm</a>
+ 
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" id="dashboardDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="profile-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        </a>
+                        
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dashboardDropdown">
+                            <li><a class="dropdown-item" href="admin-home.html">Subscriber Management</a></li>
+                            <li><a class="dropdown-item" href="adminplanmanagement.html">Plan Management</a></li>
+                            <li><a class="dropdown-item" href="admintransaction.html">Transaction Management</a></li>
+                            <li><a class="dropdown-item" href="reportand analysis.html">Reports & Analytics</a></li>
+                            <li><a class="dropdown-item" href="adminnotification.html">Notifications</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="index.html" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <!-- Plan Management Section -->
+        <br>
+            <h4>Plan Management</h4>
+            <br>
+    
+            <!-- Add New Plan Form -->
+            <h5>Add New Plan</h5>
+            <form id="addPlanForm">
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="planName" placeholder="Plan Name" required>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="planData" placeholder="Data (GB)" required>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" id="planCall" placeholder="Call Minutes" required>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" id="planSMS" placeholder="SMS Count" required>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" id="planPrice" placeholder="Price" required>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-success">Add Plan</button>
+                    </div>
+                </div>
+            </form>
+    
+            <br>
+    
+            <!-- Existing Plans Table -->
+            <h5>Existing Plans</h5>
+            <table class="table" id="planTable">
+                <thead>
+                    <tr>
+                        <th>Plan Name</th>
+                        <th>Data (GB)</th>
+                        <th>Call (Minutes)</th>
+                        <th>SMS</th>
+                        <th>Price (USD)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="planTableBody">
+                    <!-- Plans will be dynamically loaded here -->
+                </tbody>
+            </table>
+        </div>
+        
+        <script>
+            let plans = [
+                { id: 1, name: 'Basic Plan', data: '2 GB/day', call: 'Unlimited', sms: '100 SMS/day', price: 'Rs.349' },
+                { id: 2, name: 'Standard Plan', data: '5 GB/day', call: 'Unlimited', sms: '300 SMS/day', price: 'Rs.649' },
+                { id: 3, name: 'Premium Plan', data: '10 GB/day', call: 'Unlimited', sms: '500 SMS/day', price: 'Rs.999' }
+            ];
+        
+            let editingPlanId = null; // To track which plan is being edited
+        
+            function updatePlanTable() {
+                let tableBody = document.getElementById('planTableBody');
+                tableBody.innerHTML = '';
+        
+                plans.forEach((plan) => {
+                    let row = tableBody.insertRow();
+                    row.setAttribute('data-id', plan.id); // Store plan ID in row attribute
+        
+                    row.innerHTML = `
+                        <td>${plan.name}</td>
+                        <td>${plan.data}</td>
+                        <td>${plan.call}</td>
+                        <td>${plan.sms}</td>
+                        <td>${plan.price}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="editPlan(${plan.id})">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deletePlan(${plan.id})">Delete</button>
+                        </td>
+                    `;
+                });
+            }
+        
+            document.getElementById('addPlanForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+        
+                let planName = document.getElementById('planName').value;
+                let planData = document.getElementById('planData').value;
+                let planCall = document.getElementById('planCall').value;
+                let planSMS = document.getElementById('planSMS').value;
+                let planPrice = document.getElementById('planPrice').value;
+        
+                if (editingPlanId === null) {
+                    // Add new plan
+                    let newPlan = {
+                        id: plans.length ? Math.max(...plans.map(p => p.id)) + 1 : 1,
+                        name: planName,
+                        data: planData,
+                        call: planCall,
+                        sms: planSMS,
+                        price: planPrice
+                    };
+        
+                    plans.push(newPlan);
+                } else {
+                    // Edit existing plan
+                    let plan = plans.find(p => p.id === editingPlanId);
+                    plan.name = planName;
+                    plan.data = planData;
+                    plan.call = planCall;
+                    plan.sms = planSMS;
+                    plan.price = planPrice;
+        
+                    editingPlanId = null; // Reset editing state
+                    document.querySelector('button[type="submit"]').innerText = "Add Plan";
+                }
+        
+                updatePlanTable();
+                document.getElementById('addPlanForm').reset();
+            });
+        
+            function editPlan(planId) {
+                let plan = plans.find(p => p.id === planId);
+        
+                document.getElementById('planName').value = plan.name;
+                document.getElementById('planData').value = plan.data;
+                document.getElementById('planCall').value = plan.call;
+                document.getElementById('planSMS').value = plan.sms;
+                document.getElementById('planPrice').value = plan.price;
+        
+                editingPlanId = planId;
+                document.querySelector('button[type="submit"]').innerText = "Update Plan";
+            }
+        
+            function deletePlan(planId) {
+                plans = plans.filter(plan => plan.id !== planId);
+                updatePlanTable();
+            }
+        
+            updatePlanTable();
+        </script>
+        <script>
+            function logout() {
+                const confirmation = confirm("Are you sure you want to logout?");
+                if (confirmation) {
+                    alert("Logging out...");
+                    window.location.href = 'customer login.html'; // Redirect to the login page
+                } else {
+                    alert("Logout canceled.");
+                }
+            }
+        </script>
+    
+    <footer class="text-light bg-secondary mt-5 p-4"> <!-- Changed bg-dark to bg-secondary -->
+        <div class="container">
+            <div class="row">
+                <!-- Company Info -->
+                <div class="col-md-4">
+                    <h5>About Mobi.Comm</h5>
+                    <p>Mobi.Comm is a leading mobile service provider offering affordable plans with high-speed data, unlimited calls, and seamless connectivity across the country.</p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="aboutus.html" class="text-light">About Us</a></li>
+                        <li><a href="#" class="text-light">Help & Support</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Contact Information -->
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="bi bi-envelope-fill"></i> support@mobicomm.com</p>
+                    <p><i class="bi bi-telephone-fill"></i> +91 98765 43210</p>
+                    <p><i class="bi bi-geo-alt-fill"></i> Chennai, India</p>
+                    
+                    <!-- Social Media Links -->
+                    <div>
+                        <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Copyright -->
+            <div class="text-center mt-3">
+                <p>&copy; 2025 Mobi.Comm. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
