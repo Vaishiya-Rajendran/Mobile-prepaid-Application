@@ -1,0 +1,176 @@
+header {
+    background-color: rgb(50, 27, 200);
+}
+
+nav {
+    width: 100%;
+    background-color: rgb(50, 27, 200) !important;
+    color: white !important;
+    border: 2px solid rgb(50, 27, 200);
+    /* Rectangle box border */
+    padding: 10px;
+    /* Padding around navbar */
+}
+
+.navbar {
+    width: 100%;
+    color: white;
+    background-color: rgb(50, 27, 200) !important;
+    border: 1px solid rgb(50, 27, 200);
+    /* Rectangle border */
+}
+
+.profile-icon {
+    font-size: 1.8rem;
+    color: white;
+    cursor: pointer;
+    background-color: gold;
+    /* Add background color */
+    border-radius: 50%;
+    /* Make it circular */
+    padding: 5px;
+    /* Adjust padding */
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+}
+
+.nav-item {
+    position: relative;
+}
+
+.navbar-nav .nav-link {
+    font-size: 18px;
+    padding: 10px 15px;
+    transition: all 0.3s ease-in-out;
+    color: white !important;
+    border-radius: 5px;
+    /* Makes the rectangle corners rounded */
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: gold !important;
+    color: black !important;
+    border-radius: 5px;
+}
+
+/* Active state: when a link is selected */
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link:focus {
+    background-color: gold !important;
+    color: black !important;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+
+.profile-icon {
+    font-size: 1.8rem;
+    color: white;
+    cursor: pointer;
+}
+
+ /* Profile & Notification Icons */
+ .icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    /* Consistent icon container size */
+    height: 45px;
+    background-color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 45px;
+}
+
+.icon-container i {
+    font-size: 22px;
+    /* Correct icon size */
+    color: black;
+}
+
+.profile-icon-container {
+
+    border-radius: 50%;
+    padding: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+}
+
+.profile-icon-container i {
+    font-size: 2.2rem;
+}
+
+.profile-icon-container::after {
+    display: none !important;
+}
+
+.profile-icon:hover {
+    color: #ddd;
+}
+
+.dropdown-menu {
+    min-width: 150px;
+    min-height: 100px;
+    padding: 10px 0;
+    background-color: #dee5ec;
+    border-radius: 8px;
+    border: none;
+}
+
+.dropdown-menu .dropdown-item {
+    color: rgb(8, 0, 0);
+    /* Text color */
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #495057;
+    color: #f8f9fa;
+}
+
+
+.carousel-container {
+    margin-top: 2%;
+    width: 90%;
+}
+
+.carousel-inner img {
+    height: 500px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.carousel-caption h2 {
+    font-size: 1.8rem;
+    color: #fff;
+}
+
+section,
+.container {
+    margin-top: 7%;
+}
+
+footer {
+    text-align: center;
+    background-color: rgb(50, 27, 200);
+    margin: 10px;
+    padding: 10px;
+    color: white;
+    background-color: #6c757d !important;
+}
+
+html {
+    scroll-behavior: smooth;
+}

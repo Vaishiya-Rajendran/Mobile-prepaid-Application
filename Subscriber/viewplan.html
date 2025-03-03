@@ -7,75 +7,34 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <style>
-        body {
-            background-color: #f8f9fa;
-            padding-top: 70px;
-        }
-        .navbar {
-            background-color: rgb(50, 27, 200) !important;
-        }
-        .nav-link, .navbar-brand {
-            color: white !important;
-        }
-        .navbar .dropdown-toggle::after {
-            display: none !important;
-        }
-        .navbar .bi-bell {
-            font-size: 1.2rem; /* Increase icon size */
-        }
-        .navbar .icon-container {
-            background-color: gold; /* Golden background */
-            border-radius: 50%; /* Make it circular */
-            padding: 8px; /* Adjust size */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px; /* Set width */
-            height: 40px; /* Set height */
-        }
-
-        .navbar .icon-container i {
-            color: black; /* Icon color */
-            font-size: 1.2rem; /* Adjust size */
-        }
-        .container {
-            margin-top: 20px;
-        }
-        .card {
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .logout-btn {
-            background-color: red;
-            color: white;
-            width: 100%;
-        }
-        footer{
-            text-align: center;
-            background-color:rgb(50, 27, 200) ;
-            margin: 10px;
-            padding: 10px;
-            color: white;
-            background-color: #6c757d !important; /* Bootstrap secondary grey */
-  
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
    
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+     <!-- Navbar -->
+     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <img src="mobile2.jpg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
-                <span style="color: gold;">Mobi.Comm</span>
+                <span style="color: gold;"><b>Mobi.Comm</b></span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="customer-home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="availableplan.html">Prepaid Plans</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">My Plans</a>
+                    </li>
+                </ul>
                 <ul class="navbar-nav">
-                    <!-- Notification Icon -->
+                   
                     <li class="nav-item">
                         <a class="nav-link" href="notification.html">
                             <span class="icon-container">
@@ -83,47 +42,44 @@
                             </span>
                         </a>
                     </li>
-                    
-                    <!-- Dashboard Dropdown -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="icon-container">
-                            <i class="bi bi-person-circle fs-2"></i>
-                        </span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="profile management.html">Manage Profile</a></li>
-                            <li><a class="dropdown-item" href="viewplan.html">My Plans</a></li>
-                            <li><a class="dropdown-item" href="availableplan.html">Check Plans</a></li>
-                            <li><a class="dropdown-item" href="rechargehistory.html">Recharge History</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="index.html" onclick="logout()">Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
+                <!-- Profile Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="icon-container">
+                        <i class="bi bi-person-circle fs-2"></i>
+                    </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="profile management.html">Manage Profile</a></li>
+                        <li><a class="dropdown-item" href="availableplan.html">Check Plans</a></li>
+                        <li><a class="dropdown-item" href="rechargehistory.html">Recharge History</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger " href="#" onclick="logout()">Logout</a></li>
+                    </ul>
+                </li>
+                
             </div>
         </div>
     </nav>
-<div class="container">
+<div class="container" id="viewPlans">
     <div class="row">
         <!-- Left Column: Account Details -->
         <div class="col-md-4 mb-4">
             <div class="card p-3" style="background-color: rgb(198, 244, 250);">
                 <h5><b>Account Details</b></h5>
                 <hr>
-                <p><strong>User Name:</strong> Vaishiya</p>
-                <p><strong>Mobile Number:</strong> +91 9876543210</p>
-                <p><strong>Plan Validity:</strong> 28 Days</p>
+                <p><strong>Subscriber Name:</strong> Vaishiya</p>
+                <p><strong>Mobile Number:</strong> <span id="displayMobile"></span></p>
             </div>
         </div>
 
-        <div class="col-md-7 mb-7" style="background-color: rgb(213, 213, 237);">
+        <div class="col-md-7 mb-7" >
             <br>
-            <h5>Active Plan</h5>
+            <h5><b>Active Plan</b></h5>
                 <hr>
                 <div class="card p-3 mb-4">
                     <p><b>Mobile Number</b></p>
-                    <p>+91 9876543210</p>
+                    <p><span id="displayMobile"></span></p>
                 </div>
 
                 <div class="card p-3 mb-4">
@@ -159,7 +115,20 @@
 </div>
 
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let storedMobileNumber = localStorage.getItem("userMobileNumber") || "Not Available";
+        document.querySelectorAll("#displayMobile, #displayMobile2").forEach(el => el.textContent = storedMobileNumber);
+    });
 
+    function logout() {
+        if (confirm("Are you sure you want to logout?")) {
+            window.location.href = 'index.html';
+        } else {
+            alert("Logout canceled.");
+        }
+    }
+</script>
     <footer class="text-light bg-secondary mt-5 p-4"> <!-- Changed bg-dark to bg-secondary -->
         <div class="container">
             <div class="row">
@@ -174,8 +143,6 @@
                     <h5>Quick Links</h5>
                     <ul class="list-unstyled">
                         <li><a href="aboutus.html" class="text-light">About Us</a></li>
-                        <li><a href="#" class="text-light">Services</a></li>
-                        <li><a href="availableplan.html" class="text-light">Recharge Plans</a></li>
                         <li><a href="#" class="text-light">Help & Support</a></li>
                     </ul>
                 </div>
@@ -204,4 +171,15 @@
         </div>
     </footer>
 </body>
+<script>
+    function logout() {
+        const confirmation = confirm("Are you sure you want to logout?");
+        if (confirmation) {
+            alert("Logging out...");
+            window.location.href = 'customer login.html'; // Redirect to the login page
+        } else {
+            alert("Logout canceled.");
+        }
+    }
+</script>
 </html>
