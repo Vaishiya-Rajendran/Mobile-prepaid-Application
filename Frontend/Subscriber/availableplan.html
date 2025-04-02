@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Plans</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .plan-item { margin-bottom: 20px; }
+        .no-results { text-align: center; color: red; display: none; }
+        .search-container { margin-top: 70px; }
+        .category-section { margin-top: 40px; }
+        .category-section h2 { text-align: center; margin-bottom: 20px; }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Mobi.Comm</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="customer-home.html">Subscriber Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="availableplan.html">Prepaid Plans</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="viewplan.html">My Plans</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- Profile Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="icon-container">
+                                <i class="bi bi-person-circle fs-2"></i>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="profile management.html">Manage Profile</a></li>
+                            <li><a class="dropdown-item" href="availableplan.html">Check Plans</a></li>
+                            <li><a class="dropdown-item" href="rechargehistory.html">Recharge History</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container search-container">
+        <br><h3>Search Available Plans</h3>
+        <input type="text" class="form-control" id="planSearch" placeholder="Search for plans..." onkeyup="searchPlans()">
+        <div id="noResults" class="no-results mt-3">No plans found.</div>
+    </div>
+
+    <div class="container mt-4" id="plansByCategory">
+        <!-- Plans will be dynamically grouped and loaded here -->
+    </div>
+
+    <footer class="text-light bg-secondary mt-5 p-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Mobi.Comm</h5>
+                    <p>Mobi.Comm is a leading mobile service provider offering affordable plans with high-speed data, unlimited calls, and seamless connectivity across the country.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="aboutus.html" class="text-light">About Us</a></li>
+                        <li><a href="#" class="text-light">Help & Support</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="bi bi-envelope-fill"></i> support@mobicomm.com</p>
+                    <p><i class="bi bi-telephone-fill"></i> +91 98765 43210</p>
+                    <p><i class="bi bi-geo-alt-fill"></i> Chennai, India</p>
+                    <div>
+                        <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <p>© 2025 Mobi.Comm. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const BACKEND_URL = "http://localhost:8083";
+
+        // Store plans globally so we can access them in selectPlan
+        let allPlans = [];
+
+        async function loadPlans() {
+            const token = localStorage.getItem("jwtToken");
+
+            if (!token) {
+                alert("Please log in to view plans.");
+                window.location.href = "customer login.html";
+                return;
+            }
+
+            try {
+                const plansResponse = await fetch(`${BACKEND_URL}/subscriber/plans?page=0&size=20&sortBy=price&sortDir=asc`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (plansResponse.status === 204) {
+                    throw new Error("No plans available.");
+                }
+
+                if (!plansResponse.ok) {
+                    const errorText = await plansResponse.text();
+                    throw new Error(`Failed to fetch plans: ${plansResponse.status} - ${errorText}`);
+                }
+
+                const plansData = await plansResponse.json();
+                allPlans = plansData.content || [];
+                if (allPlans.length === 0) {
+                    throw new Error("No active plans found in the response.");
+                }
+
+                // Group plans by categoryName
+                const plansByCategory = {};
+                allPlans.forEach(plan => {
+                    const categoryName = plan.categoryName || "Uncategorized";
+                    if (!plansByCategory[categoryName]) {
+                        plansByCategory[categoryName] = [];
+                    }
+                    plansByCategory[categoryName].push(plan);
+                });
+
+                // Display plans grouped by category
+                const plansContainer = document.getElementById("plansByCategory");
+                plansContainer.innerHTML = ''; // Clear existing content
+
+                for (const categoryName in plansByCategory) {
+                    const categoryPlans = plansByCategory[categoryName];
+                    const categorySection = `
+                        <div class="category-section" id="${categoryName.replace(/\s+/g, '-').toLowerCase()}">
+                            <h2><b>${categoryName}</b></h2>
+                            <div class="row" id="${categoryName.replace(/\s+/g, '-').toLowerCase()}-plans">
+                            </div>
+                        </div>
+                    `;
+                    plansContainer.insertAdjacentHTML('beforeend', categorySection);
+                    const categoryPlansContainer = document.getElementById(`${categoryName.replace(/\s+/g, '-').toLowerCase()}-plans`);
+                    displayPlans(categoryPlans, categoryPlansContainer);
+                }
+            } catch (error) {
+                document.getElementById("noResults").style.display = "block";
+                document.getElementById("noResults").textContent = error.message;
+                console.error("Error loading plans:", error);
+            }
+        }
+
+        function displayPlans(plans, container) {
+            container.innerHTML = '';
+            if (!plans || plans.length === 0) {
+                container.innerHTML = '<div class="no-results">No plans available in this category.</div>';
+                return;
+            }
+            plans.forEach(plan => {
+                const planCard = `
+                    <div class="col-md-4 plan-item">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">${plan.name || 'Unnamed Plan'}</h5>
+                                <p class="card-text">Price: ₹${plan.price?.toFixed(2) || 'N/A'}</p>
+                                <p class="card-text">Validity: ${plan.validity || 'N/A'} Days</p>
+                                <p class="card-text">Data: ${plan.dataLimit || 'N/A'}</p>
+                                <p class="card-text">SMS: ${plan.smsLimit || 'N/A'}</p>
+                                <p class="card-text">Calls: <b>${plan.callLimit || 'Unlimited'}</b></p>
+                                <a href="#" class="btn btn-primary" onclick="selectPlan(${plan.id || 0})">Recharge Now</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', planCard);
+            });
+        }
+
+        function searchPlans() {
+            const query = document.getElementById("planSearch").value.toLowerCase();
+            const allPlansElements = document.querySelectorAll(".plan-item");
+
+            allPlansElements.forEach(plan => {
+                const planTitle = plan.querySelector(".card-title").textContent.toLowerCase();
+                plan.style.display = planTitle.includes(query) ? "block" : "none";
+            });
+            const hasResults = Array.from(allPlansElements).some(plan => plan.style.display !== "none");
+            document.getElementById("noResults").style.display = hasResults ? "none" : "block";
+        }
+
+        function selectPlan(planId) {
+            const selectedPlan = allPlans.find(plan => plan.id === planId);
+            if (!selectedPlan) {
+                alert("Selected plan not found.");
+                return;
+            }
+
+            localStorage.setItem("selectedPlanId", selectedPlan.id);
+            localStorage.setItem("planAmount", selectedPlan.price);
+            localStorage.setItem("selectedPlan", selectedPlan.name);
+
+            console.log("Stored in localStorage:");
+            console.log("selectedPlanId:", localStorage.getItem("selectedPlanId"));
+            console.log("planAmount:", localStorage.getItem("planAmount"));
+            console.log("selectedPlan:", localStorage.getItem("selectedPlan"));
+
+            window.location.href = "recharge.html";
+        }
+
+        function logout() {
+            localStorage.removeItem("jwtToken");
+            window.location.href = "../index.html";
+        }
+
+        window.addEventListener("load", loadPlans);
+    </script>
+</body>
+</html>

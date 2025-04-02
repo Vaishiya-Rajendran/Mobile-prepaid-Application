@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Navbar Styling */
+        .navbar {
+            background-color: #321BC8 !important; /* Purple background */
+            border-bottom: 2px solid #321BC8;
+        }
+
+        .navbar-brand {
+            color: gold !important;
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: white !important;
+            font-size: 18px;
+            padding: 10px 15px;
+            transition: all 0.3s ease-in-out;
+            border-radius: 5px;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active,
+        .navbar-nav .nav-link:focus {
+            background-color: gold !important;
+            color: black !important;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .navbar-nav .dropdown-toggle::after {
+            display: none !important;
+        }
+
+        /* Style for the user's first name in the navbar */
+        #userFirstName {
+            color: white !important;
+            font-size: 18px;
+            font-weight: 500;
+            padding: 0 5px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Ensure the dropdown toggle aligns properly */
+        .nav-item.dropdown .nav-link {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Main Content */
+        .container.customer-container {
+            padding-top: 20px; /* Small padding for breathing room */
+        }
+
+        /* Card Styling */
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card.account-details {
+            background-color: rgb(198, 244, 250);
+        }
+
+        /* Button Styling */
+        .btn-primary {
+            background-color: #007bff !important;
+            border-color: #007bff !important;
+            border-radius: 5px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3 !important;
+            border-color: #0056b3 !important;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #6c757d !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Mobi.Comm</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Subscriber Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="availableplan.html">Prepaid Plans</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="viewplan.html">My Plans</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- Profile Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <span id="userFirstName">Loading...</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="profile management.html">Manage Profile</a></li>
+                            <li><a class="dropdown-item" href="availableplan.html">Check Plans</a></li>
+                            <li><a class="dropdown-item" href="rechargehistory.html">Recharge History</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container customer-container" id="customerContainer">
+        <div class="row">
+            <!-- Left Column: Account Details -->
+            <div class="col-md-4 mb-4">
+                <div class="card p-3 account-details">
+                    <h5><b>Account Details</b></h5>
+                    <hr>
+                    <p><strong>User Name:</strong> <span id="displayUsername">Loading...</span></p>
+                    <p><strong>Mobile Number:</strong> <span id="displayMobile">Loading...</span></p>
+                </div>
+            </div>
+
+            <!-- Middle Column: Plan Details and Transactions -->
+            <div class="col-md-8 mb-4">
+                <div class="card p-3 mb-4">
+                    <h5>Plan Details</h5>
+                    <hr>
+                    <p><strong>Active Plan:</strong> <span id="activePlan">Loading...</span></p>
+                    <p><strong>Amount:</strong> <span id="planAmount">Loading...</span></p>
+                    <p><strong>Validity:</strong> <span id="planValidity">Loading...</span></p>
+                    <p><strong>Expiry Date:</strong> <span id="planExpiry">Loading...</span></p>
+                    <a href="viewplan.html" class="btn btn-primary mx-auto" style="width: 50%;">View Plan</a>
+                </div>
+                <div class="card p-3">
+                    <h5>Transactions</h5>
+                    <hr>
+                    <a href="rechargehistory.html" class="btn btn-primary mb-2 w-100">Recharge History</a>
+                    <p class="text-muted small">View your past transaction details.</p>
+                    <a href="viewplan.html" class="btn btn-primary mb-2 w-100">My Plan</a>
+                    <p class="text-muted small">Check the details of your current plan.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-light bg-secondary mt-5 p-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Mobi.Comm</h5>
+                    <p>Mobi.Comm is a leading mobile service provider offering affordable plans with high-speed data,
+                        unlimited calls, and seamless connectivity across the country.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="aboutus.html" class="text-light">About Us</a></li>
+                        <li><a href="#" class="text-light">Help & Support</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="bi bi-envelope-fill"></i> support@mobicomm.com</p>
+                    <p><i class="bi bi-telephone-fill"></i> +91 98765 43210</p>
+                    <p><i class="bi bi-geo-alt-fill"></i> Chennai, India</p>
+                    <div>
+                        <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <p>© 2025 Mobi.Comm. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const BACKEND_URL = "http://localhost:8083";
+
+        document.addEventListener("DOMContentLoaded", async function () {
+            // Dynamically adjust content margin based on navbar height
+            const navbar = document.getElementById("mainNavbar");
+            const customerContainer = document.getElementById("customerContainer");
+            const navbarHeight = navbar.offsetHeight;
+            customerContainer.style.marginTop = `${navbarHeight + 20}px`; // Add 20px for extra padding
+
+            const token = localStorage.getItem("jwtToken");
+
+            if (!token) {
+                alert("Session expired. Please log in again.");
+                window.location.href = "customer-login.html";
+                return;
+            }
+
+            // Fetch Profile Data
+            try {
+                const profileResponse = await fetch(`${BACKEND_URL}/subscriber/profile`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!profileResponse.ok) {
+                    if (profileResponse.status === 401) {
+                        alert("Session expired. Please log in again.");
+                        localStorage.removeItem("jwtToken");
+                        window.location.href = "customer-login.html";
+                    } else {
+                        throw new Error("Failed to fetch profile data");
+                    }
+                    return;
+                }
+
+                const profile = await profileResponse.json();
+                // Update Account Details
+                document.getElementById("displayUsername").innerText = profile.name || "Not Available";
+                document.getElementById("displayMobile").innerText = profile.phoneNumber || "Not Available";
+
+                // Update Navbar with User's First Name
+                const userFirstName = profile.name ? profile.name.split(" ")[0] : "User";
+                document.getElementById("userFirstName").innerText = userFirstName;
+
+                // Fetch Latest Transaction for Plan Details
+                const transactionsResponse = await fetch(`${BACKEND_URL}/subscriber/transactions?page=0&size=1&sortBy=createdAt&sortDir=desc`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!transactionsResponse.ok) {
+                    if (transactionsResponse.status === 401) {
+                        alert("Session expired. Please log in again.");
+                        localStorage.removeItem("jwtToken");
+                        window.location.href = "customer-login.html";
+                    } else {
+                        throw new Error("Failed to fetch transaction data");
+                    }
+                    return;
+                }
+
+                const transactionsData = await transactionsResponse.json();
+                const latestTransaction = transactionsData.content && transactionsData.content.length > 0 ? transactionsData.content[0] : null;
+
+                if (latestTransaction) {
+                    const plan = latestTransaction.plan;
+                    const expiryDate = new Date(latestTransaction.createdAt);
+                    expiryDate.setDate(expiryDate.getDate() + plan.validity);
+
+                    document.getElementById("activePlan").innerText = plan.name || "Not Available";
+                    document.getElementById("planAmount").innerText = `₹${plan.price.toFixed(2)}` || "Not Available";
+                    document.getElementById("planValidity").innerText = `${plan.validity} Days` || "Not Available";
+                    document.getElementById("planExpiry").innerText = expiryDate.toLocaleDateString() || "Not Available";
+                } else {
+                    document.getElementById("activePlan").innerText = "No Active Plan";
+                    document.getElementById("planAmount").innerText = "N/A";
+                    document.getElementById("planValidity").innerText = "N/A";
+                    document.getElementById("planExpiry").innerText = "N/A";
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                alert("Error fetching data: " + error.message);
+                document.getElementById("displayUsername").innerText = "Not Available";
+                document.getElementById("displayMobile").innerText = "Not Available";
+                document.getElementById("userFirstName").innerText = "User"; // Fallback for navbar
+                document.getElementById("activePlan").innerText = "Error";
+                document.getElementById("planAmount").innerText = "Error";
+                document.getElementById("planValidity").innerText = "Error";
+                document.getElementById("planExpiry").innerText = "Error";
+            }
+        });
+
+        // Adjust margin on window resize to handle navbar height changes
+        window.addEventListener("resize", function () {
+            const navbar = document.getElementById("mainNavbar");
+            const customerContainer = document.getElementById("customerContainer");
+            const navbarHeight = navbar.offsetHeight;
+            customerContainer.style.marginTop = `${navbarHeight + 20}px`;
+        });
+
+        function logout() {
+            localStorage.removeItem("jwtToken");
+            localStorage.removeItem("selectedPlanId");
+            localStorage.removeItem("planAmount");
+            localStorage.removeItem("selectedPlan");
+            window.location.href = "../index.html";
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+       
+        header {
+            background-color: rgb(50, 27, 200);
+        }
+
+        /* Navbar Styling */
+        nav {
+            width: 100%;
+            background-color: rgb(50, 27, 200) !important;
+            color: white !important;
+            border: 2px solid rgb(50, 27, 200);
+            padding: 10px;
+        }
+
+        .navbar {
+            width: 100%;
+            color: white;
+            background-color: rgb(50, 27, 200) !important;
+            border-bottom: 2px solid rgb(50, 27, 200);
+        }
+
+        /* Navbar Items */
+        .navbar-nav .nav-link {
+            font-size: 18px;
+            padding: 10px 15px;
+            transition: all 0.3s ease-in-out;
+            color: white !important;
+            border-radius: 5px;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active,
+        .navbar-nav .nav-link:focus {
+            background-color: gold !important;
+            color: black !important;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        /* Profile & Notification Icons */
+        .icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px; /* Consistent icon container size */
+            height: 45px;
+            background-color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 45px;
+        }
+
+        .icon-container i {
+            font-size: 22px; /* Correct icon size */
+            color: black;
+        }
+
+        /* Profile Dropdown */
+        .profile-icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: white !important;
+            border-radius: 50%;
+            text-align: center;
+        }
+
+        .profile-icon-container i {
+            font-size: 24px;
+            color: black;
+        }
+
+        /* Logout Button */
+        .logout-btn {
+            background-color: red;
+            color: white;
+            width: 100%;
+        }
+
+        /* Card Styling */
+        .container {
+            margin-top: 7%;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Remove the dropdown arrow (caret) */
+        .navbar-nav .dropdown-toggle::after {
+            display: none !important; /* Hides the default dropdown arrow */
+        }
+
+        .profile-container {
+            margin: 50px auto;
+            margin-top: 7%;
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="admin-home.html">
+                <span style="color: gold;"><b>Mobi.Comm</b></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-home.html">Admin Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="adminsubscriber.html">Subscriber Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="adminplanmanagement.html">Plan Management</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="icon-container">
+                                <i class="bi bi-person-circle fs-2"></i>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="adminprofilemanagement.html">Profile Management</a></li>
+                            <li><a class="dropdown-item" href="admintransaction.html">Transaction history</a></li>
+                            <!-- <li><a class="dropdown-item" href="adminnotification.html">Notification History</a></li> -->
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Transaction Management Content -->
+    <div class="container">
+        <h4>Transaction Management</h4>
+        
+        <!-- Transaction Table -->
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Username</th>
+                        <th>Mobile Number</th>
+                        <th>Transaction Date</th>
+                        <th>Amount</th>
+                        <th>Payment Method</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionTableBody">
+                    <!-- Data will be populated dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Download Button -->
+        <button class="btn btn-success download-btn" onclick="downloadTransactions()">Download Transaction Data</button>
+         
+        <!-- Back Button -->
+        <a href="#" class="btn btn-secondary" onclick="window.history.back()">Back</a>
+    </div>
+
+    <script>
+        // Backend URL (adjust port if needed)
+        const BACKEND_URL = "http://localhost:8083";
+
+        // Fetch transactions on page load
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchTransactions();
+        });
+
+        async function fetchTransactions() {
+            const token = localStorage.getItem("jwtToken");
+
+            // Check if token exists
+            if (!token) {
+                alert("Session expired. Please log in again.");
+                window.location.href = "../index.html"; // Adjust to your login page
+                return;
+            }
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/admin/transactions`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                // Check if the response is OK (status 200-299)
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        alert("Session expired or invalid token. Please log in again.");
+                        localStorage.removeItem("jwtToken");
+                        window.location.href = "../index.html";
+                        return;
+                    } else if (response.status === 403) {
+                        alert("You do not have permission to access this resource.");
+                        return;
+                    } else {
+                        const errorText = await response.text();
+                        console.error("Error response:", errorText);
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                }
+
+                const data = await response.json();
+                if (data.content && data.content.length > 0) {
+                    populateTable(data.content);
+                } else {
+                    alert(data.message || "No transactions found");
+                }
+            } catch (error) {
+                console.error("Error fetching transactions:", error);
+                alert("Error fetching transactions: " + error.message);
+            }
+        }
+
+        function populateTable(transactions) {
+            const tableBody = document.getElementById("transactionTableBody");
+            tableBody.innerHTML = ""; // Clear existing rows
+
+            transactions.forEach((transaction, index) => {
+                const row = document.createElement("tr");
+
+                // Index
+                const indexCell = document.createElement("td");
+                indexCell.textContent = index + 1;
+                row.appendChild(indexCell);
+
+                // Username
+                const usernameCell = document.createElement("td");
+                usernameCell.textContent = transaction.username || "Not Available";
+                row.appendChild(usernameCell);
+
+                // Mobile Number
+                const mobileCell = document.createElement("td");
+                mobileCell.textContent = transaction.phoneNumber;
+                row.appendChild(mobileCell);
+
+                // Transaction Date
+                const dateCell = document.createElement("td");
+                dateCell.textContent = new Date(transaction.createdAt).toLocaleDateString();
+                row.appendChild(dateCell);
+
+                // Amount
+                const amountCell = document.createElement("td");
+                amountCell.textContent = `Rs.${transaction.amount.toFixed(2)}`;
+                row.appendChild(amountCell);
+
+                // Payment Method
+                const paymentMethodCell = document.createElement("td");
+                paymentMethodCell.textContent = transaction.paymentMethod;
+                row.appendChild(paymentMethodCell);
+
+                // Status
+                const statusCell = document.createElement("td");
+                const statusBadge = document.createElement("span");
+                statusBadge.className = transaction.paymentStatus === "SUCCESS" ? "badge bg-success" : "badge bg-danger";
+                statusBadge.textContent = transaction.paymentStatus === "SUCCESS" ? "Completed" : "Failed";
+                statusCell.appendChild(statusBadge);
+                row.appendChild(statusCell);
+
+                tableBody.appendChild(row);
+            });
+
+            // Store transactions in a global variable for download
+            window.transactionsData = transactions;
+        }
+
+        function downloadTransactions() {
+            if (!window.transactionsData || window.transactionsData.length === 0) {
+                alert("No transaction data available to download.");
+                return;
+            }
+
+            let csv = 'Username,Mobile Number,Transaction Date,Amount,Payment Method,Status\n';
+
+            // Loop through each transaction to create CSV rows
+            window.transactionsData.forEach(transaction => {
+                const row = [
+                    `"${transaction.username || 'Not Available'}"`,
+                    `"${transaction.phoneNumber}"`,
+                    `"${new Date(transaction.createdAt).toLocaleDateString()}"`,
+                    `"Rs.${transaction.amount.toFixed(2)}"`,
+                    `"${transaction.paymentMethod}"`,
+                    `"${transaction.paymentStatus === 'SUCCESS' ? 'Completed' : 'Failed'}"`
+                ].join(",");
+                csv += row + '\n';
+            });
+
+            // Create a download link
+            let hiddenElement = document.createElement('a');
+            hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+            hiddenElement.target = '_blank';
+            hiddenElement.download = 'transactions.csv';
+            hiddenElement.click();
+        }
+
+        function logout() {
+            const confirmation = confirm("Are you sure you want to logout?");
+            if (confirmation) {
+                alert("Logging out...");
+                localStorage.removeItem('jwtToken');
+                window.location.href = '../index.html'; // Redirect to the login page
+            } else {
+                alert("Logout canceled.");
+            }
+        }
+    </script>
+
+    <footer class="text-light bg-secondary mt-5 p-4">
+        <div class="container">
+            <div class="row">
+                <!-- Company Info -->
+                <div class="col-md-4">
+                    <h5>About Mobi.Comm</h5>
+                    <p>Mobi.Comm is a leading mobile service provider offering affordable plans with high-speed data, unlimited calls, and seamless connectivity across the country.</p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="aboutus.html" class="text-light">About Us</a></li>
+                        <li><a href="#" class="text-light">Help & Support</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Contact Information -->
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="bi bi-envelope-fill"></i> support@mobicomm.com</p>
+                    <p><i class="bi bi-telephone-fill"></i> +91 98765 43210</p>
+                    <p><i class="bi bi-geo-alt-fill"></i> Chennai, India</p>
+                    
+                    <!-- Social Media Links -->
+                    <div>
+                        <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Copyright -->
+            <div class="text-center mt-3">
+                <p>© 2025 Mobi.Comm. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

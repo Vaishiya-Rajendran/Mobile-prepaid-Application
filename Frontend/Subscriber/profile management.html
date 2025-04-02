@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <span style="color: gold;"><b>Mobi.Comm</b></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="customer-home.html">Subscriber Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="availableplan.html">Prepaid Plans</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="viewplan.html">My Plans</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="notification.html">
+                            <span class="icon-container">
+                                <i class="bi bi-bell"></i>
+                            </span>
+                        </a>
+                    </li> -->
+                    <!-- Profile Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="icon-container">
+                                <i class="bi bi-person-circle fs-2"></i>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="profile management.html">Manage Profile</a></li>
+                            <li><a class="dropdown-item" href="availableplan.html">Check Plans</a></li>
+                            <li><a class="dropdown-item" href="rechargehistory.html">Recharge History</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <!-- Left Column: Account Details -->
+            <div class="col-md-4 mb-4">
+                <div class="card p-3" style="background-color: rgb(198, 244, 250);">
+                    <h5><b>Account Details</b></h5>
+                    <hr>
+                    <p><strong>Subscriber name:</strong> <span id="displayName">Loading...</span></p>
+                    <p><strong>Mobile Number:</strong> <span id="displayMobile">Loading...</span></p>
+                </div>
+            </div>
+
+            <div class="col-md-7 mb-7">
+                <br>
+                <h5>Subscriber Profile Management</h5>
+                <br>
+                <form id="profileForm" action="#">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Subscriber Name</label>
+                        <input type="text" class="form-control" id="username" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="mobileNumber" class="form-label">Mobile Number</label>
+                        <input type="text" class="form-control" id="mobileNumber" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="alternateMobile" class="form-label">Alternate Mobile Number</label>
+                        <input type="text" class="form-control" id="alternateMobile" placeholder="Enter alternate mobile">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter email" required>
+                        <small class="text-muted" id="emailStatus">Please verify your email address.</small>
+                    </div>
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-secondary" onclick="sendVerificationEmail()">Send Verification Email</button>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="address" placeholder="Enter your address">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-light" onclick="goBack()">Back</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Update Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Profile Updated</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Your profile has been updated successfully!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-light bg-secondary mt-5 p-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Mobi.Comm</h5>
+                    <p>Mobi.Comm is a leading mobile service provider offering affordable plans with high-speed data, unlimited calls, and seamless connectivity across the country.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="aboutus.html" class="text-light">About Us</a></li>
+                        <li><a href="#" class="text-light">Help & Support</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="bi bi-envelope-fill"></i> support@mobicomm.com</p>
+                    <p><i class="bi bi-telephone-fill"></i> +91 98765 43210</p>
+                    <p><i class="bi bi-geo-alt-fill"></i> Chennai, India</p>
+                    <div>
+                        <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <p>© 2025 Mobi.Comm. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const BACKEND_URL = "http://localhost:8083"; // Match your backend port
+
+        // Function to fetch profile data with retry logic
+        async function fetchProfileData(retries = 3, delay = 1000) {
+            const token = localStorage.getItem("jwtToken");
+            if (!token) {
+                alert("Please log in first.");
+                window.location.href = "customer login.html";
+                return false;
+            }
+
+            for (let attempt = 1; attempt <= retries; attempt++) {
+                try {
+                    const response = await fetch(`${BACKEND_URL}/subscriber/profile`, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`,
+                        },
+                    });
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`Failed to fetch profile: ${response.status} - ${errorText}`);
+                    }
+
+                    const subscriber = await response.json();
+                    // Populate UI elements
+                    const displayName = document.getElementById("displayName");
+                    const displayMobile = document.getElementById("displayMobile");
+                    const username = document.getElementById("username");
+                    const mobileNumber = document.getElementById("mobileNumber");
+                    const alternateMobile = document.getElementById("alternateMobile");
+                    const email = document.getElementById("email");
+                    const address = document.getElementById("address");
+
+                    if (displayName) displayName.textContent = subscriber.name || "N/A";
+                    if (displayMobile) displayMobile.textContent = subscriber.phoneNumber || "N/A";
+                    if (username) username.value = subscriber.name || "";
+                    if (mobileNumber) mobileNumber.value = subscriber.phoneNumber || "";
+                    if (alternateMobile) alternateMobile.value = subscriber.alternateMobile || "";
+                    if (email) email.value = subscriber.email || "";
+                    if (address) address.value = subscriber.address || "";
+
+                    console.log("Profile data loaded:", subscriber);
+                    return true; // Success
+                } catch (error) {
+                    console.error(`Attempt ${attempt} failed:`, error);
+                    if (attempt === retries) {
+                        // Set fallback values after all retries fail
+                        const displayName = document.getElementById("displayName");
+                        const displayMobile = document.getElementById("displayMobile");
+                        if (displayName) displayName.textContent = "N/A";
+                        if (displayMobile) displayMobile.textContent = "N/A";
+                        alert("Unable to load profile data after multiple attempts. Please try again later.");
+                        return false;
+                    }
+                    await new Promise(resolve => setTimeout(resolve, delay)); // Wait before retry
+                }
+            }
+        }
+
+        // Load subscriber profile data on page load
+        document.addEventListener("DOMContentLoaded", async () => {
+            await fetchProfileData();
+        });
+
+        // Handle form submission to update profile
+        document.getElementById("profileForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const token = localStorage.getItem("jwtToken");
+            if (!token) {
+                alert("Please log in first.");
+                window.location.href = "customer login.html";
+                return;
+            }
+
+            const updateData = {
+                email: document.getElementById("email").value.trim(),
+                alternateMobile: document.getElementById("alternateMobile").value.replace(/[^0-9]/g, ""),
+                address: document.getElementById("address").value.trim(),
+            };
+
+            // Basic client-side validation
+            if (!updateData.email) {
+                alert("Email is required.");
+                return;
+            }
+            if (updateData.alternateMobile && !/^[0-9]{10}$/.test(updateData.alternateMobile)) {
+                alert("Alternate mobile number must be 10 digits.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/subscriber/profile`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(updateData),
+                });
+                const result = await response.json();
+
+                if (response.ok) {
+                    const modal = new bootstrap.Modal(document.getElementById("successModal"));
+                    modal.show();
+                    // Refresh profile data after update
+                    await fetchProfileData();
+                } else {
+                    alert(result.message || "Failed to update profile.");
+                }
+            } catch (error) {
+                alert("Error updating profile. Please try again.");
+                console.error("Update error:", error);
+            }
+        });
+
+        // Send verification email (placeholder)
+        function sendVerificationEmail() {
+            alert("Verification email sent! (Placeholder)");
+        }
+
+        // Navigate back to customer home
+        function goBack() {
+            window.location.href = "customer-home.html";
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem("jwtToken");
+            window.location.href = "customer login.html";
+        }
+    </script>
+</body>
+</html>

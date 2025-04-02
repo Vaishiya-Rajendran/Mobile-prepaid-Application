@@ -124,8 +124,8 @@ nav {
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <span style="color: gold;"><b>Mobi.Comm</b></span>
+            <a class="navbar-brand"  href="admin-home.html">
+                <span style="color: gold;" ><b>Mobi.Comm</b></span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -134,7 +134,7 @@ nav {
 
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="admin-home.html">Home</a>
+                        <a class="nav-link" href="admin-home.html">Admin Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="adminsubscriber.html">Subscriber Management</a>
@@ -155,7 +155,7 @@ nav {
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="adminprofilemanagement.html">Profile Management</a></li>
                         <li><a class="dropdown-item" href="admintransaction.html">Transaction history</a></li>
-                        <li><a class="dropdown-item" href="adminnotification.html">Notification History</a></li>
+                        <!-- <li><a class="dropdown-item" href="adminnotification.html">Notification History</a></li> -->
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-danger " href="#" onclick="logout()">Logout</a></li>
                     </ul>
@@ -241,8 +241,7 @@ nav {
 
         function logout() {
             if (confirm("Are you sure you want to logout?")) {
-                alert("Logging out...");
-                window.location.href = 'index.html';
+                window.location.href = '../index.html';
             }
         }
     </script>

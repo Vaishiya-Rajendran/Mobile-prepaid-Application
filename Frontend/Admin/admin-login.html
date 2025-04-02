@@ -22,7 +22,7 @@
             background-color: white;
             padding: 40px;
             border-radius: 8px;
-            border-style:groove;
+            border-style: groove;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
@@ -82,14 +82,18 @@
         .forgot-password a:hover {
             text-decoration: underline;
         }
+
+        #loginError {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <span style="color: gold; margin-left: 5px;"><b> Mobi.Comm</b></span>
+            <a class="navbar-brand" href="../index.html">
+                <span style="color: gold; margin-left: 5px;" href="../index.html"><b>Mobi.Comm</b></span>
             </a>
         </div>
     </nav>
@@ -97,111 +101,125 @@
     <!-- Login Form -->
     <div class="login-container" style="background-color: rgb(198, 244, 250);">
         <h2 class="text-center mb-4">Admin Login</h2>
-        <form id="adminLoginForm" onsubmit="return validateForm(event)">
-            <!-- Username -->
-            <div class="mb-3">
-                <label for="username" class="form-label">Admin Username</label>
-                <input type="text" class="form-control" id="username" placeholder="Enter username">
-                <div id="usernameError" class="error-message"></div>
-            </div>
-            
+        <form id="adminLoginForm">
             <!-- Email -->
             <div class="mb-3">
                 <label for="email" class="form-label">E-mail Address</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter e-mail address">
+                <input type="email" class="form-control" id="email" placeholder="Enter e-mail address" required>
                 <div id="emailError" class="error-message"></div>
             </div>
             
             <!-- Password -->
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Enter password">
+                <input type="password" class="form-control" id="password" placeholder="Enter password" required>
                 <div id="passwordError" class="error-message"></div>
                 <div class="forgot-password">
-                    <a href="#">Forgot Password?</a>
+                    <a href="#" onclick="forgotPassword()">Forgot Password?</a>
                 </div>
             </div>
+
+            <!-- Hidden Role ID -->
+            <input type="hidden" id="roleId" value="1"> <!-- Hardcoded for ADMIN; confirm with RoleType enum -->
 
             <!-- Submit Button -->
             <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>
+        <div id="loginError" class="error-message mt-3"></div>
     </div>
 
     <script>
-        document.getElementById('username').addEventListener('input', function () {
-            if (this.value.trim() === '') {
-                document.getElementById('usernameError').innerHTML = 'Username is required.';
-            } else {
-                document.getElementById('usernameError').innerHTML = '';
-            }
-        });
-    
+        const BACKEND_URL = "http://localhost:8083"; // Update if your backend port differs
+
         document.getElementById('email').addEventListener('input', function () {
             validateEmail();
         });
-    
+
         document.getElementById('password').addEventListener('input', function () {
             validatePassword();
         });
-    
+
         function validateEmail() {
             const email = document.getElementById('email').value;
             const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             if (email.trim() === '') {
                 document.getElementById('emailError').innerHTML = 'Email is required.';
+                return false;
             } else if (!emailPattern.test(email)) {
                 document.getElementById('emailError').innerHTML = 'Please enter a valid email address.';
+                return false;
             } else {
                 document.getElementById('emailError').innerHTML = '';
+                return true;
             }
         }
-    
+
         function validatePassword() {
             const password = document.getElementById('password').value;
             const passwordError = document.getElementById('passwordError');
             const passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
-    
+
             if (password.trim() === '') {
                 passwordError.innerHTML = 'Password is required.';
+                return false;
             } else if (!passwordPattern.test(password)) {
-                passwordError.innerHTML = 'Password must be at least 6 characters, include 1 uppercase,1 special character.';
+                passwordError.innerHTML = 'Password must be at least 6 characters, include 1 uppercase, 1 special character.';
+                return false;
             } else {
                 passwordError.innerHTML = '';
+                return true;
             }
         }
-    
-        function validateForm(event) {
+
+        async function handleLogin(event) {
             event.preventDefault(); // Prevent form submission
-    
-            let valid = true;
-    
-            // Reset error messages
-            document.getElementById('usernameError').innerHTML = '';
-            document.getElementById('emailError').innerHTML = '';
-            document.getElementById('passwordError').innerHTML = '';
-    
-            // Username validation
-            const username = document.getElementById('username').value;
-            if (username.trim() === '') {
-                document.getElementById('usernameError').innerHTML = 'Username is required.';
-                valid = false;
+
+            const loginError = document.getElementById('loginError');
+            loginError.innerHTML = ''; // Clear previous errors
+
+            // Validate form fields
+            const isEmailValid = validateEmail();
+            const isPasswordValid = validatePassword();
+
+            if (!isEmailValid || !isPasswordValid) {
+                return;
             }
-    
-            // Email validation
-            validateEmail();
-            if (document.getElementById('emailError').innerHTML !== '') valid = false;
-    
-            // Password validation
-            validatePassword();
-            if (document.getElementById('passwordError').innerHTML !== '') valid = false;
-    
-            if (valid) {
-                window.location.href = "admin-home.html"; // Redirect to admin home page
+
+            const requestData = {
+                email: document.getElementById('email').value.trim(),
+                password: document.getElementById('password').value.trim(),
+                roleId: parseInt(document.getElementById('roleId').value) // Hardcoded as 1 for ADMIN
+            };
+
+            console.log("Sending login request with:", requestData); // Debug log
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/auth/login/admin`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(requestData)
+                });
+
+                console.log("Response status:", response.status); // Debug log
+                const data = await response.json();
+                console.log("Response data:", data); // Debug log
+
+                if (response.ok) {
+                    // Store the JWT token in localStorage
+                    localStorage.setItem("jwtToken", data.token);
+                    alert("Login successful! Redirecting to admin-home.html"); // Debug alert
+                    window.location.href = "admin-home.html";
+                } else {
+                    loginError.innerHTML = data.error || "Login failed. Please try again.";
+                    alert("Login failed: " + (data.error || "Unknown error")); // Debug alert
+                }
+            } catch (error) {
+                loginError.innerHTML = "Network error. Please try again.";
+                console.error("Error:", error); // Debug log
+                alert("Network error: " + error.message); // Debug alert
             }
-    
-            return valid;
         }
-    
+
         function forgotPassword() {
             let email = prompt("Enter your registered email address:");
             if (email) {
@@ -213,8 +231,9 @@
                 }
             }
         }
+
+        // Attach the form submission handler
+        document.getElementById("adminLoginForm").addEventListener("submit", handleLogin);
     </script>
-    
-    
 </body>
 </html>

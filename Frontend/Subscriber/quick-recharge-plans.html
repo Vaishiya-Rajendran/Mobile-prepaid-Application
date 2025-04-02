@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Recharge Plans</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .navbar {
+            background-color: #321BC8 !important;
+            border-bottom: 2px solid #321BC8;
+        }
+        .navbar-brand {
+            color: gold !important;
+            font-weight: bold;
+        }
+        .container.quick-recharge-plans-container {
+            padding-top: 20px;
+            background-color: #E3F2FD;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #007bff !important;
+            border-color: #007bff !important;
+            border-radius: 5px;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3 !important;
+            border-color: #0056b3 !important;
+        }
+        footer {
+            background-color: #6c757d !important;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../index.html">Mobi.Comm</a>
+        </div>
+    </nav>
+
+    <div class="container quick-recharge-plans-container mt-5" id="quickRechargePlans">
+        <h2 class="text-center">Select a Plan for Quick Recharge</h2>
+        <p class="text-center">Mobile Number: <span id="mobileNumberDisplay">Loading...</span></p>
+        <div class="row mt-4" id="plansContainer">
+            <!-- Plans will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <footer class="text-light bg-secondary mt-5 p-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Mobi.Comm</h5>
+                    <p>Mobi.Comm is a leading mobile service provider offering affordable plans with high-speed data, unlimited calls, and seamless connectivity across the country.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="../assesst/aboutus.html" class="text-light">About Us</a></li>
+                        <li><a href="#" class="text-light">Help & Support</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="bi bi-envelope-fill"></i> support@mobicomm.com</p>
+                    <p><i class="bi bi-telephone-fill"></i> +91 98765 43210</p>
+                    <p><i class="bi bi-geo-alt-fill"></i> Chennai, India</p>
+                    <div>
+                        <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <p>© 2025 Mobi.Comm. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const BACKEND_URL = "http://localhost:8083";
+
+        document.addEventListener("DOMContentLoaded", async function () {
+            const navbar = document.getElementById("mainNavbar");
+            const quickRechargePlans = document.getElementById("quickRechargePlans");
+            const navbarHeight = navbar.offsetHeight;
+            quickRechargePlans.style.marginTop = `${navbarHeight + 20}px`;
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const mobileNumber = urlParams.get("mobileNumber");
+
+            if (!mobileNumber) {
+                alert("Mobile number not provided. Please start from the homepage.");
+                window.location.href = "../index.html";
+                return;
+            }
+
+            document.getElementById("mobileNumberDisplay").textContent = mobileNumber;
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/subscriber/plans?page=0&size=10`, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch plans.");
+                }
+
+                const plansData = await response.json();
+                const plans = plansData.content || plansData; // Handle pagination or direct array
+                const plansContainer = document.getElementById("plansContainer");
+
+                plans.forEach(plan => {
+                    const planCard = `
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">${plan.name}</h5>
+                                    <p class="card-text">
+                                        Data: ${plan.dataLimit}<br>
+                                        Calls: ${plan.callLimit}<br>
+                                        SMS: ${plan.smsLimit}<br>
+                                        Validity: ${plan.validity} Days<br>
+                                        Price: ₹${plan.price}
+                                    </p>
+                                    <button class="btn btn-primary" onclick="selectPlan('${plan.id}', '${plan.name}', ${plan.price}, '${mobileNumber}')">Select Plan</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    plansContainer.innerHTML += planCard;
+                });
+            } catch (error) {
+                alert("Error fetching plans: " + error.message);
+                console.error("Fetch error:", error);
+            }
+        });
+
+        window.addEventListener("resize", function () {
+            const navbar = document.getElementById("mainNavbar");
+            const quickRechargePlans = document.getElementById("quickRechargePlans");
+            const navbarHeight = navbar.offsetHeight;
+            quickRechargePlans.style.marginTop = `${navbarHeight + 20}px`;
+        });
+
+        function selectPlan(planId, planName, planPrice, mobileNumber) {
+            localStorage.setItem("quickRechargePlanId", planId);
+            localStorage.setItem("quickRechargePlanName", planName);
+            localStorage.setItem("quickRechargePlanPrice", planPrice);
+            localStorage.setItem("quickRechargeMobileNumber", mobileNumber);
+            window.location.href = "recharge.html";
+        }
+    </script>
+</body>
+</html>

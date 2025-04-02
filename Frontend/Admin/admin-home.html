@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        header {
+            background-color: rgb(50, 27, 200);
+        }
+
+        nav {
+            width: 100%;
+            background-color: rgb(50, 27, 200) !important;
+            color: white !important;
+            border: 2px solid rgb(50, 27, 200);
+            padding: 10px;
+        }
+
+        .navbar {
+            width: 100%;
+            color: white;
+            background-color: rgb(50, 27, 200) !important;
+            border-bottom: 2px solid rgb(50, 27, 200);
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 18px;
+            padding: 10px 15px;
+            transition: all 0.3s ease-in-out;
+            color: white !important;
+            border-radius: 5px;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active,
+        .navbar-nav .nav-link:focus {
+            background-color: gold !important;
+            color: black !important;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background-color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 45px;
+        }
+
+        .icon-container i {
+            font-size: 22px;
+            color: black;
+        }
+
+        .profile-icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: white !important;
+            border-radius: 50%;
+            text-align: center;
+        }
+
+        .profile-icon-container i {
+            font-size: 24px;
+            color: black;
+        }
+
+        .logout-btn {
+            background-color: red;
+            color: white;
+            width: 100%;
+        }
+
+        .navbar-nav .dropdown-toggle::after {
+            display: none !important;
+        }
+
+        .container {
+            margin-top: 7%;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .table {
+            background-color: #e3f2fd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table th {
+            background-color: #007bff !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .table td,
+        .table th {
+            border: 1px solid #131313;
+            text-align: center;
+        }
+
+        .expiring-plans-container {
+            margin: 20px;
+            padding: 20px;
+            margin-left: 5%;
+            margin-right: 5%;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h4 {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            text-align: center;
+            background-color: #6c757d !important;
+            margin: 10px;
+            padding: 10px;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="admin-home.html"><span style="color: gold;"><b>Mobi.Comm</b></span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" href="#">Admin Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="adminsubscriber.html">Subscriber Management</a></li>
+                    <li class="nav-item"><a class="nav-link" href="adminplanmanagement.html">Plan Management</a></li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="icon-container"><i class="bi bi-person-circle fs-2"></i></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="adminprofilemanagement.html">Profile Management</a></li>
+                            <li><a class="dropdown-item" href="admintransaction.html">Transaction History</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container mt-4">
+            <h3><b>Welcome, Admin!</b></h3>
+            <br>
+            <div class="row text-center" style="background-color: rgb(227, 242, 248);">
+                <br>
+                <div class="col-md-3">
+                    <br>
+                    <div class="card text-white bg-success mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Active Users</h5>
+                            <p class="card-text" id="activeUsers">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <br>
+                    <div class="card text-white bg-success mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Recharges Today</h5>
+                            <p class="card-text" id="totalRecharges">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <br>
+                    <div class="card text-white bg-success mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Revenue Today</h5>
+                            <p class="card-text" id="totalRevenue">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="expiring-plans-container">
+            <br>
+            <h4>Subscribers Plans Expiring in Next 3 Days</h4>
+            <table class="table">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Mobile Number</th>
+                        <th>Plan Expiry Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="expiringPlansTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer class="text-light bg-secondary mt-5 p-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Mobi.Comm</h5>
+                    <p>Mobi.Comm is a leading mobile service provider offering affordable plans with high-speed data,
+                        unlimited calls, and seamless connectivity across the country.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="aboutus.html" class="text-light">About Us</a></li>
+                        <li><a href="#" class="text-light">Help & Support</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="bi bi-envelope-fill"></i> support@mobicomm.com</p>
+                    <p><i class="bi bi-telephone-fill"></i> +91 98765 43210</p>
+                    <p><i class="bi bi-geo-alt-fill"></i> Chennai, India</p>
+                    <div>
+                        <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <p>© 2025 Mobi.Comm. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const BACKEND_URL = "http://localhost:8083";
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            const token = localStorage.getItem("jwtToken");
+            if (!token) {
+                alert("Please log in as an admin first.");
+                window.location.href = "index.html";
+                return;
+            }
+
+            try {
+                console.log("Fetching dashboard data with token:", token);
+                const response = await fetch(`${BACKEND_URL}/admin/dashboard`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Failed to fetch dashboard data: ${response.status} - ${errorText}`);
+                }
+
+                const data = await response.json();
+                const activeUsersEl = document.getElementById("activeUsers");
+                const totalRechargesEl = document.getElementById("totalRecharges");
+                const totalRevenueEl = document.getElementById("totalRevenue");
+
+                if (activeUsersEl) activeUsersEl.innerText = data.activeUsers || 0;
+                if (totalRechargesEl) totalRechargesEl.innerText = data.totalRechargesToday || 0;
+                if (totalRevenueEl) totalRevenueEl.innerText = `Rs.${data.totalRevenueToday || 0}`;
+                console.log("Dashboard data loaded:", data);
+            } catch (error) {
+                console.error("Error loading dashboard:", error);
+                const activeUsersEl = document.getElementById("activeUsers");
+                const totalRechargesEl = document.getElementById("totalRecharges");
+                const totalRevenueEl = document.getElementById("totalRevenue");
+
+                if (activeUsersEl) activeUsersEl.innerText = "N/A";
+                if (totalRechargesEl) totalRechargesEl.innerText = "N/A";
+                if (totalRevenueEl) totalRevenueEl.innerText = "N/A";
+            }
+        }
+
+        // Load expiring plans
+        async function loadExpiringPlans() {
+            const token = localStorage.getItem("jwtToken");
+            try {
+                console.log("Fetching expiring plans with token:", token);
+                const response = await fetch(`${BACKEND_URL}/admin/plans/expiring`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Failed to fetch expiring plans: ${response.status} - ${errorText}`);
+                }
+
+                const plans = await response.json();
+                const tableBody = document.getElementById("expiringPlansTableBody");
+                if (tableBody) {
+                    tableBody.innerHTML = "";
+                    if (plans.length === 0) {
+                        tableBody.innerHTML = "<tr><td colspan='5'>No plans expiring soon.</td></tr>";
+                    } else {
+                        plans.forEach((plan, index) => {
+                            const row = document.createElement("tr");
+                            row.innerHTML = `
+                                <td>${index + 1}</td>
+                                <td>${plan.name}</td>
+                                <td>${plan.mobileNumber}</td>
+                                <td>${new Date(plan.expiryDate).toLocaleDateString()}</td>
+                                <td><button class="btn btn-warning btn-sm" onclick="sendNotification('${plan.name}', '${plan.mobileNumber}')">Send Notification</button></td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+                    }
+                    console.log("Expiring plans loaded:", plans);
+                }
+            } catch (error) {
+                console.error("Error loading expiring plans:", error);
+                const tableBody = document.getElementById("expiringPlansTableBody");
+                if (tableBody) {
+                    tableBody.innerHTML = "<tr><td colspan='5'>Error loading plans: ${error.message}</td></tr>";
+                }
+            }
+        }
+
+        // Send notification
+        async function sendNotification(name, mobileNumber) {
+            const token = localStorage.getItem("jwtToken");
+            if (!token) {
+                alert("Please log in as an admin first.");
+                window.location.href = "index.html";
+                return;
+            }
+
+            const message = "Your plan is expiring soon. Please recharge to continue enjoying Mobi.Comm services.";
+            try {
+                console.log("Sending notification to:", name, mobileNumber);
+                const response = await fetch(`${BACKEND_URL}/admin/notifications`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ name, mobileNumber, message })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Failed to send notification: ${response.status} - ${errorText || "Unknown error"}`);
+                }
+
+                const data = await response.json();
+                alert(data.message || `Notification sent to ${name}`);
+                console.log("Notification sent successfully:", data);
+            } catch (error) {
+                console.error("Error sending notification:", error);
+                alert("Error sending notification: " + error.message);
+            }
+        }
+
+        function logout() {
+            if (confirm("Are you sure you want to logout?")) {
+                localStorage.removeItem("jwtToken");
+                alert("Logging out...");
+                window.location.href = "../index.html";
+            } else {
+                alert("Logout canceled.");
+            }
+        }
+
+        // Load data on page load
+        window.addEventListener("load", () => {
+            loadDashboardData();
+            loadExpiringPlans();
+        });
+    </script>
+</body>
+
+</html>

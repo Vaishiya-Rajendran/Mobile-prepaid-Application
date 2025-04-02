@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recharge</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .navbar {
+            background-color: #321BC8 !important;
+            border-bottom: 2px solid #321BC8;
+        }
+
+        .navbar-brand {
+            color: gold !important;
+            font-weight: bold;
+        }
+
+        .container.recharge-container {
+            padding-top: 20px;
+            background-color: #E3F2FD;
+            position: relative;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-success {
+            background-color: #28a745 !important;
+            border-color: #28a745 !important;
+            border-radius: 5px;
+        }
+
+        .btn-success:hover {
+            background-color: #218838 !important;
+            border-color: #218838 !important;
+        }
+
+        .btn-primary {
+            background-color: #007bff !important;
+            border-color: #007bff !important;
+            border-radius: 5px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3 !important;
+            border-color: #0056b3 !important;
+        }
+
+        footer {
+            background-color: #6c757d !important;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 0.3rem solid #007bff;
+            border-top: 0.3rem solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Mobi.Comm</a>
+            <div class="ms-auto">
+                <button class="btn btn-danger" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container recharge-container mt-5" id="rechargePage">
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="spinner"></div>
+        </div>
+        <h2 id="plan-title" style="text-align: center;">Mobile Recharge</h2>
+        <p id="plan-description" style="text-align: center;">Complete your payment to recharge your mobile number</p>
+
+        <div class="mb-3">
+            <label for="mobileNumber" class="form-label">Mobile Number</label>
+            <input type="text" id="mobileNumber" class="form-control" placeholder="Fetching mobile number..." readonly>
+            <div id="mobileNumber-error" class="text-danger"></div>
+        </div>
+
+        <button class="btn btn-success mt-4 w-100" onclick="proceedToPayment()">Proceed to Payment</button>
+        <div id="error-message" class="alert alert-danger mt-3" style="display: none;"></div>
+    </div>
+
+    <div id="success-message" class="container mt-4" style="display: none;">
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Payment Successful!</h4>
+            <p>Your recharge has been successfully processed.</p>
+            <div id="invoice-section" class="mt-4">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">Invoice</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Transaction ID:</strong> <span id="invoice-transaction-id"></span></p>
+                        <p><strong>Plan Details:</strong> <span id="invoice-plan-details"></span></p>
+                        <p><strong>Amount:</strong> ₹<span id="invoice-amount"></span></p>
+                        <p><strong>Payment Method:</strong> <span id="invoice-payment-method"></span></p>
+                        <p><strong>Payment Status:</strong> <span id="invoice-payment-status"></span></p>
+                        <p><strong>Mobile Number:</strong> <span id="invoice-mobile-number"></span></p>
+                        <p><strong>Date & Time:</strong> <span id="invoice-date-time"></span></p>
+                        <button class="btn btn-primary" onclick="downloadInvoice()">Download Invoice as PDF</button>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary mt-3" onclick="goBack()">Back to Home</button>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmPaymentModal" tabindex="-1" aria-labelledby="confirmPaymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmPaymentModalLabel">Confirm Payment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to proceed with the payment of ₹<span id="confirm-amount"></span> for the selected plan?</p>
+                    <p><strong>Mobile Number:</strong> <span id="confirm-mobile"></span></p>
+                    <p><strong>Payment Method:</strong> Razorpay</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" onclick="confirmPayment()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-light bg-secondary mt-5 p-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Mobi.Comm</h5>
+                    <p>Mobi.Comm is a leading mobile service provider offering affordable plans with high-speed data, unlimited calls, and seamless connectivity across the country.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="aboutus.html" class="text-light">About Us</a></li>
+                        <li><a href="#" class="text-light">Help & Support</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="bi bi-envelope-fill"></i> support@mobicomm.com</p>
+                    <p><i class="bi bi-telephone-fill"></i> +91 98765 43210</p>
+                    <p><i class="bi bi-geo-alt-fill"></i> Chennai, India</p>
+                    <div>
+                        <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <p>© 2025 Mobi.Comm. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const BACKEND_URL = "http://localhost:8083";
+        const RAZORPAY_KEY_ID = "rzp_test_GqJn5IN8LD0wep"; // Replace with your Razorpay Key ID
+        let paymentData = null;
+
+        document.addEventListener("DOMContentLoaded", async function () {
+            const navbar = document.getElementById("mainNavbar");
+            const rechargePage = document.getElementById("rechargePage");
+            const navbarHeight = navbar.offsetHeight;
+            rechargePage.style.marginTop = `${navbarHeight + 20}px`;
+
+            const token = localStorage.getItem("jwtToken");
+            const planId = localStorage.getItem("selectedPlanId");
+            const amount = localStorage.getItem("planAmount");
+            const planDetails = localStorage.getItem("selectedPlan");
+
+            if (!token) {
+                showError("Session expired. Please log in again.");
+                setTimeout(() => window.location.href = "customer-login.html", 2000);
+                return;
+            }
+
+            if (!planId || !amount || !planDetails) {
+                showError("Please select a plan before proceeding.");
+                setTimeout(() => window.location.href = "availableplan.html", 2000);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/subscriber/profile`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    if (response.status === 401) {
+                        showError("Session expired. Please log in again.");
+                        setTimeout(() => window.location.href = "customer-login.html", 2000);
+                    } else {
+                        showError(`Failed to fetch profile: ${errorData.message || "Unknown error"}`);
+                    }
+                    return;
+                }
+                const profile = await response.json();
+                document.getElementById("mobileNumber").value = profile.phoneNumber || "N/A";
+            } catch (error) {
+                showError(`Error fetching mobile number: ${error.message || "Unable to connect to the server"}`);
+                console.error("Profile fetch error:", error);
+            }
+        });
+
+        window.addEventListener("resize", function () {
+            const navbar = document.getElementById("mainNavbar");
+            const rechargePage = document.getElementById("rechargePage");
+            const navbarHeight = navbar.offsetHeight;
+            rechargePage.style.marginTop = `${navbarHeight + 20}px`;
+        });
+
+        function showFieldError(inputId, message) {
+            document.getElementById(inputId + "-error").textContent = message;
+        }
+
+        function clearFieldError(inputId) {
+            document.getElementById(inputId + "-error").textContent = "";
+        }
+
+        function showError(message) {
+            const errorElement = document.getElementById("error-message");
+            errorElement.textContent = message;
+            errorElement.style.display = "block";
+        }
+
+        function showLoading(show) {
+            document.getElementById("loadingOverlay").style.display = show ? "flex" : "none";
+        }
+
+        function proceedToPayment() {
+            document.getElementById("error-message").style.display = "none";
+            const mobileNumber = document.getElementById("mobileNumber").value.trim();
+            const planId = localStorage.getItem("selectedPlanId");
+            const amount = localStorage.getItem("planAmount");
+            const token = localStorage.getItem("jwtToken");
+
+            if (!mobileNumber || !/^[0-9]{10}$/.test(mobileNumber)) {
+                showFieldError("mobileNumber", "Invalid mobile number");
+                return;
+            }
+            clearFieldError("mobileNumber");
+
+            paymentData = {
+                mobileNumber: mobileNumber,
+                planId: parseInt(planId),
+                amount: parseFloat(amount)
+            };
+
+            document.getElementById("confirm-amount").textContent = amount;
+            document.getElementById("confirm-mobile").textContent = mobileNumber;
+            new bootstrap.Modal(document.getElementById("confirmPaymentModal")).show();
+        }
+
+        async function confirmPayment() {
+            const token = localStorage.getItem("jwtToken");
+            const modal = bootstrap.Modal.getInstance(document.getElementById("confirmPaymentModal"));
+            modal.hide();
+
+            showLoading(true);
+            try {
+                // Step 1: Initiate recharge and create Razorpay order
+                const initiateResponse = await fetch(`${BACKEND_URL}/subscriber/recharge/initiate`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(paymentData)
+                });
+
+                const initiateData = await initiateResponse.json();
+                if (!initiateResponse.ok) {
+                    if (initiateResponse.status === 401) {
+                        showError("Session expired. Please log in again.");
+                        setTimeout(() => window.location.href = "customer-login.html", 2000);
+                    } else {
+                        showError(initiateData.message || "Failed to initiate payment. Please try again.");
+                    }
+                    showLoading(false);
+                    return;
+                }
+
+                const razorpayOrderId = initiateData.razorpayOrderId;
+                const transactionId = initiateData.transactionId;
+                const amount = initiateData.amount;
+
+                // Step 2: Open Razorpay checkout modal
+                const options = {
+                    key: RAZORPAY_KEY_ID,
+                    amount: amount * 100, // Amount in paise
+                    currency: "INR",
+                    name: "Mobi.Comm",
+                    description: "Mobile Recharge Payment",
+                    order_id: razorpayOrderId,
+                    handler: async function (response) {
+                        try {
+                            // Step 3: Verify payment on the backend
+                            const verifyResponse = await fetch(`${BACKEND_URL}/subscriber/recharge/verify`, {
+                                method: "POST",
+                                headers: {
+                                    "Authorization": `Bearer ${token}`,
+                                    "Content-Type": "application/x-www-form-urlencoded"
+                                },
+                                body: new URLSearchParams({
+                                    razorpayPaymentId: response.razorpay_payment_id,
+                                    razorpayOrderId: response.razorpay_order_id,
+                                    razorpaySignature: response.razorpay_signature
+                                })
+                            });
+
+                            const verifyData = await verifyResponse.json();
+                            if (!verifyResponse.ok) {
+                                console.error("Payment verification failed:", verifyData);
+                                showError(verifyData.message || "Payment verification failed. Please try again.");
+                                showLoading(false);
+                                return;
+                            }
+
+                            // Log the verifyData to debug
+                            console.log("Payment verification successful. verifyData:", verifyData);
+
+                            // Step 4: Display success message and invoice
+                            const rechargePage = document.getElementById("rechargePage");
+                            const successMessage = document.getElementById("success-message");
+
+                            if (!rechargePage || !successMessage) {
+                                console.error("DOM elements not found: rechargePage or success-message");
+                                showError("An error occurred while displaying the invoice. Please try again.");
+                                showLoading(false);
+                                return;
+                            }
+
+                            rechargePage.style.display = "none";
+                            successMessage.style.display = "block";
+
+                            // Populate the invoice
+                            const planDetails = localStorage.getItem("selectedPlan") || "N/A";
+                            document.getElementById("invoice-transaction-id").textContent = verifyData.transactionId || "N/A";
+                            document.getElementById("invoice-plan-details").textContent = planDetails;
+                            document.getElementById("invoice-amount").textContent = (verifyData.amount || 0).toFixed(2);
+                            document.getElementById("invoice-payment-method").textContent = "Razorpay";
+                            document.getElementById("invoice-payment-status").textContent = verifyData.paymentStatus || "N/A";
+                            document.getElementById("invoice-mobile-number").textContent = paymentData.mobileNumber || "N/A";
+                            document.getElementById("invoice-date-time").textContent = verifyData.createdAt ? new Date(verifyData.createdAt).toLocaleString() : "N/A";
+
+                            // Scroll to the success message
+                            successMessage.scrollIntoView({ behavior: "smooth" });
+                        } catch (error) {
+                            console.error("Error in payment handler:", error);
+                            showError(`Error displaying invoice: ${error.message || "Unknown error"}`);
+                        } finally {
+                            showLoading(false);
+                        }
+                    },
+                    prefill: {
+                        contact: paymentData.mobileNumber,
+                        email: "customer@example.com" // You can fetch this from the profile if available
+                    },
+                    theme: {
+                        color: "#321BC8"
+                    }
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.on('payment.failed', function (response) {
+                    console.error("Payment failed:", response.error);
+                    showError("Payment failed: " + response.error.description);
+                    showLoading(false);
+                });
+                rzp.open();
+            } catch (error) {
+                console.error("Error initiating payment:", error);
+                showError(`Error processing payment: ${error.message || "Unable to connect to the server"}`);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function downloadInvoice() {
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                doc.setFontSize(18);
+                doc.text("Mobi.Comm Invoice", 20, 20);
+                doc.setFontSize(12);
+                doc.text(`Transaction ID: ${document.getElementById("invoice-transaction-id").textContent}`, 20, 40);
+                doc.text(`Plan Details: ${document.getElementById("invoice-plan-details").textContent}`, 20, 50);
+                doc.text(`Amount: ₹${document.getElementById("invoice-amount").textContent}`, 20, 60);
+                doc.text(`Payment Method: ${document.getElementById("invoice-payment-method").textContent}`, 20, 70);
+                doc.text(`Payment Status: ${document.getElementById("invoice-payment-status").textContent}`, 20, 80);
+                doc.text(`Mobile Number: ${document.getElementById("invoice-mobile-number").textContent}`, 20, 90);
+                doc.text(`Date & Time: ${document.getElementById("invoice-date-time").textContent}`, 20, 100);
+
+                doc.save(`MobiComm_Invoice_${document.getElementById("invoice-transaction-id").textContent}.pdf`);
+            } catch (error) {
+                console.error("Error downloading invoice:", error);
+                showError("Failed to download invoice. Please try again.");
+            }
+        }
+
+        function goBack() {
+            window.location.href = "customer-home.html";
+        }
+
+        function logout() {
+            localStorage.removeItem("jwtToken");
+            localStorage.removeItem("selectedPlanId");
+            localStorage.removeItem("planAmount");
+            localStorage.removeItem("selectedPlan");
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>

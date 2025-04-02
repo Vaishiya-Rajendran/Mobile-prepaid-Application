@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Subscriber Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        header {
+            background-color: rgb(50, 27, 200);
+        }
+
+        /* Navbar Styling */
+        nav {
+            width: 100%;
+            background-color: rgb(50, 27, 200) !important;
+            color: white !important;
+            border: 2px solid rgb(50, 27, 200);
+            padding: 10px;
+        }
+
+        .navbar {
+            width: 100%;
+            color: white;
+            background-color: rgb(50, 27, 200) !important;
+            border-bottom: 2px solid rgb(50, 27, 200);
+        }
+
+        /* Navbar Items */
+        .navbar-nav .nav-link {
+            font-size: 18px;
+            padding: 10px 15px;
+            transition: all 0.3s ease-in-out;
+            color: white !important;
+            border-radius: 5px;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active,
+        .navbar-nav .nav-link:focus {
+            background-color: gold !important;
+            color: black !important;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        /* Profile & Notification Icons */
+        .icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background-color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 45px;
+        }
+
+        .icon-container i {
+            font-size: 22px;
+            color: black;
+        }
+
+        /* Profile Dropdown */
+        .profile-icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: white !important;
+            border-radius: 50%;
+            text-align: center;
+        }
+
+        .profile-icon-container i {
+            font-size: 24px;
+            color: black;
+        }
+
+        /* Logout Button */
+        .logout-btn {
+            background-color: red;
+            color: white;
+            width: 100%;
+        }
+
+        /* Card Styling */
+        .container {
+            margin-top: 7%;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Remove the dropdown arrow (caret) */
+        .navbar-nav .dropdown-toggle::after {
+            display: none !important;
+        }
+
+        .table {
+            background-color: #e3f2fd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table th {
+            background-color: #007bff !important;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .table td,
+        .table th {
+            border: 1px solid #131313;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            background-color: rgb(50, 27, 200);
+            margin: 10px;
+            padding: 10px;
+            color: white;
+            background-color: #6c757d !important;
+        }
+
+        .pagination-controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .pagination-controls button {
+            margin: 0 5px;
+        }
+
+        .filter-controls {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="admin-home.html">
+                <span style="color: gold;"  ><b>Mobi.Comm</b></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-home.html">Admin Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Subscriber Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="adminplanmanagement.html">Plan Management</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="icon-container">
+                                <i class="bi bi-person-circle fs-2"></i>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="adminprofilemanagement.html">Profile Management</a></li>
+                            <li><a class="dropdown-item" href="admintransaction.html">Transaction history</a></li>
+                            <li><a class="dropdown-item" href="adminnotification.html">Notification History</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 class="text-center">Subscribers Management</h2>
+
+        <div class="filter-controls">
+            <div>
+                <label for="statusFilter">Filter by Status: </label>
+                <select id="statusFilter" onchange="loadSubscribers()">
+                    <option value="">All</option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="INACTIVE">Inactive</option>
+                    <option value="PENDING">Pending</option>
+                </select>
+            </div>
+            <div>
+                <label for="sortBy">Sort by: </label>
+                <select id="sortBy" onchange="loadSubscribers()">
+                    <option value="id">ID</option>
+                    <option value="name">Name</option>
+                    <option value="email">Email</option>
+                    <option value="phoneNumber">Mobile Number</option>
+                </select>
+                <select id="sortDir" onchange="loadSubscribers()">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table" id="subscriberTable">
+                <thead>
+                    <tr>
+                        <th>Subscriber Name</th>
+                        <th>Email</th>
+                        <th>Mobile Number</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="subscriberTableBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination-controls">
+            <button class="btn btn-primary" onclick="changePage(-1)" id="prevPageBtn" disabled>Previous</button>
+            <span id="pageInfo">Page 1 of 1</span>
+            <button class="btn btn-primary" onclick="changePage(1)" id="nextPageBtn">Next</button>
+        </div>
+    </div>
+
+    <script>
+        const BACKEND_URL = "http://localhost:8083";
+        let currentPage = 0;
+        const pageSize = 10;
+        let totalPages = 1;
+
+        async function loadSubscribers() {
+            const token = localStorage.getItem("jwtToken");
+
+            if (!token) {
+                alert("Please log in to view subscribers.");
+                window.location.href = "index.html";
+                return;
+            }
+
+            const statusFilter = document.getElementById("statusFilter").value;
+            const sortBy = document.getElementById("sortBy").value;
+            const sortDir = document.getElementById("sortDir").value;
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/admin/getsubscribers?page=${currentPage}&size=${pageSize}&sortBy=${sortBy}&sortDir=${sortDir}${statusFilter ? `&status=${statusFilter}` : ''}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Failed to fetch subscribers: ${response.status} - ${errorText}`);
+                }
+
+                const data = await response.json();
+                renderTable(data.content || []);
+
+                // Update pagination
+                totalPages = data.totalPages || 1;
+                document.getElementById("pageInfo").textContent = `Page ${currentPage + 1} of ${totalPages}`;
+                document.getElementById("prevPageBtn").disabled = currentPage === 0;
+                document.getElementById("nextPageBtn").disabled = currentPage >= totalPages - 1;
+            } catch (error) {
+                alert(error.message);
+                console.error("Error loading subscribers:", error);
+            }
+        }
+
+        function renderTable(subscribers) {
+            const tableBody = document.getElementById("subscriberTableBody");
+            tableBody.innerHTML = "";
+            if (!subscribers || subscribers.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5">No subscribers found.</td></tr>';
+                return;
+            }
+            subscribers.forEach(subscriber => {
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${subscriber.name || 'N/A'}</td>
+                        <td>${subscriber.email || 'N/A'}</td>
+                        <td>${subscriber.phoneNumber || 'N/A'}</td>
+                        <td><span class="badge bg-${subscriber.status === 'ACTIVE' ? 'success' : subscriber.status === 'INACTIVE' ? 'warning' : 'secondary'}">${subscriber.status}</span></td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="toggleStatus(${subscriber.id}, '${subscriber.status}')">${subscriber.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteSubscriber(${subscriber.id})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        async function toggleStatus(id, currentStatus) {
+            const token = localStorage.getItem("jwtToken");
+            const newStatus = currentStatus === "ACTIVE" ? "INACTIVE" : "ACTIVE";
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/admin/verify-subscriber/${id}?status=${newStatus}`, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Failed to update status: ${response.status} - ${errorText}`);
+                }
+
+                const data = await response.json();
+                alert(data.message);
+                await loadSubscribers();
+            } catch (error) {
+                alert(error.message);
+                console.error("Error updating status:", error);
+            }
+        }
+
+        async function deleteSubscriber(id) {
+            if (!confirm("Are you sure you want to delete this subscriber?")) {
+                return;
+            }
+
+            const token = localStorage.getItem("jwtToken");
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/admin/deletesubscriber/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Failed to delete subscriber: ${response.status} - ${errorText}`);
+                }
+
+                const data = await response.json();
+                alert(data.message);
+                await loadSubscribers();
+            } catch (error) {
+                alert(error.message);
+                console.error("Error deleting subscriber:", error);
+            }
+        }
+
+        function changePage(delta) {
+            const newPage = currentPage + delta;
+            if (newPage >= 0 && newPage < totalPages) {
+                currentPage = newPage;
+                loadSubscribers();
+            }
+        }
+
+        function logout() {
+            const confirmation = confirm("Are you sure you want to logout?");
+            if (confirmation) {
+                localStorage.removeItem("jwtToken");
+                alert("Logging out...");
+                window.location.href = '../index.html';
+            } else {
+                alert("Logout canceled.");
+            }
+        }
+
+        window.onload = loadSubscribers;
+    </script>
+
+    <footer class="text-light bg-secondary mt-5 p-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Mobi.Comm</h5>
+                    <p>Mobi.Comm is a leading mobile service provider offering affordable plans with high-speed data,
+                        unlimited calls, and seamless connectivity across the country.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="aboutus.html" class="text-light">About Us</a></li>
+                        <li><a href="#" class="text-light">Help & Support</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="bi bi-envelope-fill"></i> support@mobicomm.com</p>
+                    <p><i class="bi bi-telephone-fill"></i> +91 98765 43210</p>
+                    <p><i class="bi bi-geo-alt-fill"></i> Chennai, India</p>
+                    <div>
+                        <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <p>© 2025 Mobi.Comm. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

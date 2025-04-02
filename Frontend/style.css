@@ -136,7 +136,6 @@ nav {
 
 
 .carousel-container {
-    margin-top: 2%;
     width: 90%;
 }
 
@@ -173,4 +172,8 @@ footer {
 
 html {
     scroll-behavior: smooth;
+}
+
+#indexContainer{
+    margin-top: 10px;
 }

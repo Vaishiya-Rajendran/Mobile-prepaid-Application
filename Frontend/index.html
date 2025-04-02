@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Prepaid</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Navbar Styling */
+        .navbar {
+            background-color: #321BC8 !important;
+            border-bottom: 2px solid #321BC8;
+        }
+
+        .navbar-brand {
+            color: gold !important;
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: white !important;
+            font-size: 18px;
+            padding: 10px 15px;
+            transition: all 0.3s ease-in-out;
+            border-radius: 5px;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link.active,
+        .navbar-nav .nav-link:focus {
+            background-color: gold !important;
+            color: black !important;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .profile-icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background-color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 45px;
+        }
+
+        .profile-icon-container i {
+            font-size: 22px;
+            color: black;
+        }
+
+        .container.carousel-container {
+            padding-top: 20px;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background-color: #007bff !important;
+            border-color: #007bff !important;
+            border-radius: 5px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3 !important;
+            border-color: #0056b3 !important;
+        }
+
+        #popularPlans, #quickRecharge, #support {
+            background-color: #E3F2FD;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 40px auto;
+        }
+
+        footer {
+            background-color: #6c757d !important;
+        }
+
+        /* Loading Spinner */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 0.3rem solid #007bff;
+            border-top: 0.3rem solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Mobi.Comm</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#popularPlans">Popular Plans</a></li>
+                    <!-- <li class="nav-item"><a class="nav-link" href="#quickRecharge">Quick Recharge</a></li> -->
+                    <li class="nav-item"><a class="nav-link" href="#support">Support</a></li>
+                </ul>
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle profile-icon-container" href="#" id="profileDropdown" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                        <li><a class="dropdown-item" href="Admin/admin-login.html">Admin</a></li>
+                        <li><a class="dropdown-item" href="Subscriber/customer login.html">Subscriber</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container carousel-container" id="indexContainer">
+        <div id="carouselExampleDark" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000" data-bs-pause="false">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/assesst/images/mobile3.jpg" class="d-block w-100" alt="First Slide">
+                    <div class="carousel-caption overlay">
+                        <h2>Premium entertainment, incredible price!</h2>
+                        <p>Recharge Now and enjoy the plan</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/assesst/images/carousel3.webp" class="d-block w-100" alt="Second Slide">
+                    <div class="carousel-caption overlay">
+                        <h2>Unlimited Data & Calls</h2>
+                        <p>Experience seamless connectivity.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="/assesst/images/carousel1.jpg" class="d-block w-100" alt="Third Slide">
+                    <div class="carousel-caption overlay">
+                        <h2>Best Offers for New Users</h2>
+                        <p>Sign up today and get exclusive discounts.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="container mt-5" id="popularPlans">
+        <h1 class="text-center">Popular Plans</h1>
+        <br>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹399 Plan</h5>
+                        <p class="card-text">Unlimited Calls + 1.5GB/Day + 28 Days Validity.</p>
+                        <a class="btn btn-primary" href="/Subscriber/customer-login.html">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹599 Plan</h5>
+                        <p class="card-text">Unlimited Calls + 2GB/Day + 56 Days Validity.</p>
+                        <a class="btn btn-primary" href="/Subscriber/customer-login.html">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹799 Plan</h5>
+                        <p class="card-text">Unlimited Calls + 3GB/Day + 84 Days Validity.</p>
+                        <a class="btn btn-primary" href="/Subscriber/customer-login.html">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">₹999 Plan</h5>
+                        <p class="card-text">Unlimited Calls + 4GB/Day + 365 Days Validity.</p>
+                        <a class="btn btn-primary" href="/Subscriber/customer-login.html">Recharge Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="container mt-4" id="quickRecharge" style="max-width: 600px;">
+        <h2 class="text-center">Quick Recharge</h2>
+        <form id="quickRechargeForm" class="mt-3" style="display: flex; flex-direction: column; align-items: center;">
+            <div class="mb-3" style="width: 100%;">
+                <label for="mobileNumber" class="form-label"><b>Mobile Number</b></label>
+                <input type="tel" class="form-control" id="mobileNumber" placeholder="Enter 10-digit mobile number" required>
+                <div id="mobileError" style="color: red; font-size: 14px; margin-top: 5px;"></div>
+                <div id="successMessage" style="color: green; font-size: 14px; margin-top: 5px; display: none;"></div>
+            </div>
+            <button type="button" onclick="initiateQuickRecharge()" class="btn btn-primary mt-2">Proceed</button>
+        </form>
+    </div> -->
+
+    <div class="container mt-5" id="support">
+        <br>
+        <h2 class="text-center mb-4">Support</h2>
+        <div class="accordion" id="faqAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                        How can I recharge my mobile online?
+                    </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">You can recharge by selecting a plan from our website and proceeding with the payment options available.</div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                        What payment methods are accepted?
+                    </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">We accept credit/debit cards, UPI, net banking, and mobile wallets.</div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                        How do I contact customer support?
+                    </button>
+                </h2>
+                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">You can reach us via email at support@mobicomm.com or call us at +91 98765 43210.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-light bg-secondary mt-5 p-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Mobi.Comm</h5>
+                    <p>Mobi.Comm is a leading mobile service provider offering affordable plans with high-speed data, unlimited calls, and seamless connectivity across the country.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="assesst/aboutus.html" class="text-light">About Us</a></li>
+                        <li><a href="#" class="text-light">Help & Support</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="bi bi-envelope-fill"></i> support@mobicomm.com</p>
+                    <p><i class="bi bi-telephone-fill"></i> +91 98765 43210</p>
+                    <p><i class="bi bi-geo-alt-fill"></i> Chennai, India</p>
+                    <div>
+                        <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <p>© 2025 Mobi.Comm. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        const BACKEND_URL = "http://localhost:8083";
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const navbar = document.getElementById("mainNavbar");
+            const indexContainer = document.getElementById("indexContainer");
+            const navbarHeight = navbar.offsetHeight;
+            indexContainer.style.marginTop = `${navbarHeight + 20}px`;
+        });
+
+        window.addEventListener("resize", function () {
+            const navbar = document.getElementById("mainNavbar");
+            const indexContainer = document.getElementById("indexContainer");
+            const navbarHeight = navbar.offsetHeight;
+            indexContainer.style.marginTop = `${navbarHeight + 20}px`;
+        });
+
+        function showLoading(show) {
+            document.getElementById("loadingOverlay").style.display = show ? "flex" : "none";
+        }
+
+        function showError(message) {
+            const errorElement = document.getElementById("mobileError");
+            errorElement.textContent = message;
+            errorElement.style.display = "block";
+            document.getElementById("successMessage").style.display = "none";
+        }
+
+        function showSuccess(message) {
+            const successElement = document.getElementById("successMessage");
+            successElement.textContent = message;
+            successElement.style.display = "block";
+            document.getElementById("mobileError").style.display = "none";
+        }
+
+        async function initiateQuickRecharge() {
+            const mobileNumber = document.getElementById("mobileNumber").value.trim();
+            const mobileError = document.getElementById("mobileError");
+            const successMessage = document.getElementById("successMessage");
+
+            // Clear previous messages
+            mobileError.style.display = "none";
+            successMessage.style.display = "none";
+
+            // Validate mobile number format
+            if (!mobileNumber || !/^[0-9]{10}$/.test(mobileNumber)) {
+                showError("Please enter a valid 10-digit mobile number.");
+                return;
+            }
+
+            showLoading(true);
+
+            try {
+                // Step 1: Check if the mobile number is registered
+                const checkResponse = await fetch(`${BACKEND_URL}/subscriber/check/${mobileNumber}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!checkResponse.ok) {
+                    if (checkResponse.status === 404) {
+                        showError("This mobile number is not registered. Please sign up first.");
+                    } else {
+                        showError("Error checking mobile number. Please try again.");
+                    }
+                    return;
+                }
+
+                // Step 2: For simplicity, use a default plan (e.g., ₹399 plan, ID: 1)
+                const rechargeData = {
+                    mobileNumber: mobileNumber,
+                    planId: 1, // Default plan ID, adjust as needed
+                    amount: 399.00, // Default amount for ₹399 plan
+                    paymentMethod: "upi" // Default payment method for quick recharge
+                };
+
+                const rechargeResponse = await fetch(`${BACKEND_URL}/subscriber/quick-recharge`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(rechargeData)
+                });
+
+                const responseData = await rechargeResponse.json();
+
+                if (!rechargeResponse.ok) {
+                    showError(responseData.message || "Failed to process recharge. Please try again.");
+                    return;
+                }
+
+                showSuccess("Recharge successful! Transaction ID: " + responseData.transactionId);
+                document.getElementById("mobileNumber").value = ""; // Clear input
+            } catch (error) {
+                showError("Error connecting to the server. Please try again later.");
+                console.error("Quick Recharge Error:", error);
+            } finally {
+                showLoading(false);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../index.html">
+                <span style="color: gold;"><b>Mobi.Comm</b></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="login-container" style="background-color:rgb(198, 244, 250);">
+        <h3 class="text-center mb-4">Subscriber Login</h3>
+        <form id="loginForm">
+            <div class="mb-3">
+                <label for="mobileNumber" class="form-label">Mobile Number</label>
+                <input type="tel" class="form-control" id="mobileNumber" placeholder="Enter your mobile number" required>
+                <span id="mobileError" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <label for="otp" class="form-label">OTP</label>
+                <input type="text" class="form-control" id="otp" placeholder="Enter OTP" disabled>
+                <span id="otpError" class="text-danger"></span>
+            </div>
+
+            <p id="otpSuccess" class="text-success"></p>
+
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-primary" id="generateOTPBtn">Generate OTP</button>
+                <button type="submit" class="btn btn-success" id="loginBtn" disabled>Login</button>
+            </div>
+            <p class="text-center mt-3">
+                Don't have an account? <a href="subscriber-registration.html" class="text-primary">Register here</a>
+            </p>
+        </form>
+    </div>
+
+    <div class="modal fade" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="otpModalLabel">Your OTP</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <h4 id="otpDisplay" class="text-primary"></h4>
+                    <p class="text-muted">Enter this OTP to proceed with login. Check your phone for the OTP.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BACKEND_URL = "http://localhost:8083";
+
+        function enableOtpInput() {
+            document.getElementById("otp").disabled = false;
+            document.getElementById("loginBtn").disabled = false;
+        }
+
+        async function sendOtp() {
+            const phoneNumber = document.getElementById("mobileNumber").value.trim();
+            const mobileError = document.getElementById("mobileError");
+            const otpSuccess = document.getElementById("otpSuccess");
+
+            if (!phoneNumber || !/^[0-9]{10}$/.test(phoneNumber)) {
+                mobileError.textContent = "Please enter a valid 10-digit phone number.";
+                return;
+            }
+            mobileError.textContent = "";
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/auth/send-otp`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ phoneNumber })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    otpSuccess.textContent = data.message || "OTP sent successfully!";
+                    document.getElementById("otpDisplay").textContent = "XXXXXX"; // Placeholder
+                    new bootstrap.Modal(document.getElementById("otpModal")).show();
+                    enableOtpInput();
+                } else {
+                    mobileError.textContent = data.message || "Failed to send OTP";
+                }
+            } catch (error) {
+                mobileError.textContent = "Network error. Please try again.";
+                console.error("Error:", error);
+            }
+        }
+
+        async function verifyOtp() {
+            const phoneNumber = document.getElementById("mobileNumber").value.trim();
+            const otp = document.getElementById("otp").value.trim();
+            const otpError = document.getElementById("otpError");
+            const otpSuccess = document.getElementById("otpSuccess");
+
+            if (!otp || !/^[0-9]{6}$/.test(otp)) {
+                otpError.textContent = "Please enter a valid 6-digit OTP.";
+                return;
+            }
+            otpError.textContent = "";
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/auth/login/subscriber`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ phoneNumber, otp })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    otpSuccess.textContent = "Login successful!";
+                    localStorage.setItem("jwtToken", data.token);
+                    setTimeout(() => window.location.href = "customer-home.html", 1000);
+                } else {
+                    otpError.textContent = data.message || "Invalid OTP";
+                }
+            } catch (error) {
+                otpError.textContent = "Network error. Please try again.";
+                console.error("Error:", error);
+            }
+        }
+
+        document.getElementById("generateOTPBtn").addEventListener("click", sendOtp);
+        document.getElementById("loginForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            await verifyOtp();
+        });
+    </script>
+</body>
+</html>

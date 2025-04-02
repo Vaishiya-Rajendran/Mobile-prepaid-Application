@@ -1,0 +1,351 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send SMS Notification</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .center-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 7%;
+            margin-left: 10%;
+            margin-right: 10%;
+            padding: 20px;
+        }
+        .content-box {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 700px;
+        }
+        .notification-form, .notification-history {
+            width: 100%;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        header { background-color: rgb(50, 27, 200); }
+        nav { width: 100%; background-color: rgb(50, 27, 200) !important; color: white !important; border: 2px solid rgb(50, 27, 200); padding: 10px; }
+        .navbar { width: 100%; color: white; background-color: rgb(50, 27, 200) !important; border-bottom: 2px solid rgb(50, 27, 200); }
+        .navbar-nav .nav-link { font-size: 18px; padding: 10px 15px; transition: all 0.3s ease-in-out; color: white !important; border-radius: 5px; }
+        .navbar-nav .nav-link:hover, .navbar-nav .nav-link.active, .navbar-nav .nav-link:focus { background-color: gold !important; color: black !important; border-radius: 5px; text-decoration: none; }
+        .icon-container { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; background-color: white; border-radius: 50%; text-align: center; line-height: 45px; }
+        .icon-container i { font-size: 22px; color: black; }
+        .profile-icon-container { display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; background-color: white !important; border-radius: 50%; text-align: center; }
+        .profile-icon-container i { font-size: 24px; color: black; }
+        .logout-btn { background-color: red; color: white; width: 100%; }
+        .navbar-nav .dropdown-toggle::after { display: none !important; }
+        footer { text-align: center; background-color: #6c757d !important; margin: 10px; padding: 10px; color: white; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../index.html">
+                <span style="color: gold;"><b>Mobi.Comm</b></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="adminsubscriber.html">Subscriber Management</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="adminplanmanagement.html">Plan Management</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="icon-container">
+                                <i class="bi bi-person-circle fs-2"></i>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="adminprofilemanagement.html">Profile Management</a></li>
+                            <li><a class="dropdown-item" href="admintransaction.html">Transaction History</a></li>
+                            <li><a class="dropdown-item" href="adminnotification.html">Notification History</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="center-container">
+        <div class="content-box">
+            <div class="notification-form">
+                <h3 class="text-center">Send SMS Notification</h3>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" id="name" class="form-control" placeholder="Enter Name">
+                </div>
+                <div class="mb-3">
+                    <label for="mobile" class="form-label">Mobile Number</label>
+                    <input type="text" id="mobile" class="form-control" placeholder="Enter Mobile Number">
+                </div>
+                <div class="mb-3">
+                    <label for="message" class="form-label">Message</label>
+                    <textarea id="message" class="form-control" rows="3" placeholder="Enter your message"></textarea>
+                </div>
+                <button class="btn btn-primary w-100 mb-2" onclick="sendSMS()">Send to Specific User</button>
+                <button class="btn btn-success w-100" onclick="sendToAll()">Send to All Users</button>
+            </div>
+
+            <div class="notification-history">
+                <h3 class="text-center">Subscribers</h3>
+                <div class="table-container table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Mobile Number</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subscriberTable"></tbody>
+                    </table>
+                </div>
+                <h3 class="text-center">Notification History</h3>
+                <div class="table-container table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Mobile Number</th>
+                                <th>Message</th>
+                                <th>Status</th>
+                                <th>Date and Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-light bg-secondary mt-5 p-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Mobi.Comm</h5>
+                    <p>Mobi.Comm is a leading mobile service provider offering affordable plans with high-speed data, unlimited calls, and seamless connectivity across the country.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="aboutus.html" class="text-light">About Us</a></li>
+                        <li><a href="#" class="text-light">Help & Support</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p><i class="bi bi-envelope-fill"></i> support@mobicomm.com</p>
+                    <p><i class="bi bi-telephone-fill"></i> +91 98765 43210</p>
+                    <p><i class="bi bi-geo-alt-fill"></i> Chennai, India</p>
+                    <div>
+                        <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <p>© 2025 Mobi.Comm. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="successModalLabel">Success</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="modalMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BACKEND_URL = "http://localhost:8083";
+
+        async function sendSMS() {
+            const name = document.getElementById("name").value.trim();
+            const mobile = document.getElementById("mobile").value.trim();
+            const message = document.getElementById("message").value.trim();
+            const token = localStorage.getItem("jwtToken");
+
+            if (!name || !mobile || !message) {
+                alert("Please fill all fields.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/admin/notifications`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ name, mobileNumber: mobile, message })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Failed to send notification: ${response.status} - ${errorText}`);
+                }
+
+                const notification = await response.json();
+                document.getElementById("modalMessage").innerText = `Notification sent to ${mobile}`;
+                new bootstrap.Modal(document.getElementById('successModal')).show();
+
+                document.getElementById("name").value = "";
+                document.getElementById("mobile").value = "";
+                document.getElementById("message").value = "";
+
+                await loadNotificationHistory();
+            } catch (error) {
+                alert(error.message); // Improved error message
+                console.error("Error sending SMS:", error);
+            }
+        }
+
+        async function sendToAll() {
+            const message = document.getElementById("message").value.trim();
+            const token = localStorage.getItem("jwtToken");
+
+            if (!message) {
+                alert("Please enter a message.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/admin/notifications/all`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ message })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Failed to send notification to all: ${response.status} - ${errorText}`);
+                }
+
+                document.getElementById("modalMessage").innerText = "Notification sent to all users";
+                new bootstrap.Modal(document.getElementById('successModal')).show();
+
+                document.getElementById("message").value = "";
+                await loadNotificationHistory();
+            } catch (error) {
+                alert(error.message); // Improved error message
+                console.error("Error sending to all:", error);
+            }
+        }
+
+        async function loadSubscribers() {
+            const token = localStorage.getItem("jwtToken");
+            try {
+                const response = await fetch(`${BACKEND_URL}/admin/notifications/subscribers`, {
+                    method: "GET",
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+
+                if (!response.ok) throw new Error(`Failed to fetch subscribers: ${response.status} - ${await response.text()}`);
+
+                const subscribers = await response.json();
+                const subscriberTable = document.getElementById("subscriberTable");
+                subscriberTable.innerHTML = "";
+
+                subscribers.forEach(subscriber => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${subscriber.name || 'N/A'}</td>
+                        <td>${subscriber.phoneNumber}</td>
+                    `;
+                    subscriberTable.appendChild(row);
+                });
+            } catch (error) {
+                alert(error.message);
+                console.error("Error loading subscribers:", error);
+            }
+        }
+
+        async function loadNotificationHistory() {
+            const token = localStorage.getItem("jwtToken");
+            try {
+                const response = await fetch(`${BACKEND_URL}/admin/notifications`, {
+                    method: "GET",
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+
+                if (!response.ok) throw new Error(`Failed to fetch notification history: ${response.status} - ${await response.text()}`);
+
+                const notifications = await response.json();
+                const historyTable = document.getElementById("historyTable");
+                historyTable.innerHTML = "";
+
+                notifications.forEach(notification => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${notification.name || 'N/A'}</td>
+                        <td>${notification.mobileNumber}</td>
+                        <td>${notification.message}</td>
+                        <td><span class="badge bg-${notification.status === 'SENT' ? 'success' : 'secondary'}">${notification.status}</span></td>
+                        <td>${new Date(notification.sentAt).toLocaleString()}</td>
+                    `;
+                    historyTable.appendChild(row);
+                });
+            } catch (error) {
+                alert(error.message);
+                console.error("Error loading history:", error);
+            }
+        }
+
+        function logout() {
+            if (confirm("Are you sure you want to logout?")) {
+                localStorage.removeItem("jwtToken");
+                alert("Logging out...");
+                window.location.href = '../index.html';
+            } else {
+                alert("Logout canceled.");
+            }
+        }
+
+        window.addEventListener("load", () => {
+            loadSubscribers();
+            loadNotificationHistory();
+        });
+    </script>
+</body>
+</html> -->
