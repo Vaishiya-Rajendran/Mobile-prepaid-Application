@@ -42,19 +42,22 @@
             display: none !important;
         }
 
-        /* Style for the user's first name in the navbar */
-        #userFirstName {
-            color: white !important;
-            font-size: 18px;
-            font-weight: 500;
-            padding: 0 5px;
-            transition: all 0.3s ease-in-out;
-        }
-
-        /* Ensure the dropdown toggle aligns properly */
-        .nav-item.dropdown .nav-link {
+        /* Icon Containers for Bell and Profile */
+        .icon-container {
             display: flex;
             align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background-color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 45px;
+        }
+
+        .icon-container i {
+            font-size: 22px;
+            color: black;
         }
 
         /* Main Content */
@@ -112,11 +115,20 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav">
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="notification.html">
+                            <span class="icon-container">
+                                <i class="bi bi-bell"></i>
+                            </span>
+                        </a>
+                    </li> -->
                     <!-- Profile Dropdown -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <span id="userFirstName">Loading...</span>
+                            <span class="icon-container">
+                                <i class="bi bi-person-circle fs-2"></i>
+                            </span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="profile management.html">Manage Profile</a></li>
@@ -240,13 +252,8 @@
                 }
 
                 const profile = await profileResponse.json();
-                // Update Account Details
                 document.getElementById("displayUsername").innerText = profile.name || "Not Available";
                 document.getElementById("displayMobile").innerText = profile.phoneNumber || "Not Available";
-
-                // Update Navbar with User's First Name
-                const userFirstName = profile.name ? profile.name.split(" ")[0] : "User";
-                document.getElementById("userFirstName").innerText = userFirstName;
 
                 // Fetch Latest Transaction for Plan Details
                 const transactionsResponse = await fetch(`${BACKEND_URL}/subscriber/transactions?page=0&size=1&sortBy=createdAt&sortDir=desc`, {
@@ -291,7 +298,6 @@
                 alert("Error fetching data: " + error.message);
                 document.getElementById("displayUsername").innerText = "Not Available";
                 document.getElementById("displayMobile").innerText = "Not Available";
-                document.getElementById("userFirstName").innerText = "User"; // Fallback for navbar
                 document.getElementById("activePlan").innerText = "Error";
                 document.getElementById("planAmount").innerText = "Error";
                 document.getElementById("planValidity").innerText = "Error";

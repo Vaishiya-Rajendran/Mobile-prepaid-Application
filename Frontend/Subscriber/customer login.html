@@ -58,7 +58,7 @@
                 </div>
                 <div class="modal-body text-center">
                     <h4 id="otpDisplay" class="text-primary"></h4>
-                    <p class="text-muted">Enter this OTP to proceed with login. Check your phone for the OTP.</p>
+                    <p class="text-muted">Enter this OTP to proceed with login. Check the server console for the OTP.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -76,11 +76,11 @@
         }
 
         async function sendOtp() {
-            const phoneNumber = document.getElementById("mobileNumber").value.trim();
+            const mobileNumber = document.getElementById("mobileNumber").value.trim();
             const mobileError = document.getElementById("mobileError");
             const otpSuccess = document.getElementById("otpSuccess");
 
-            if (!phoneNumber || !/^[0-9]{10}$/.test(phoneNumber)) {
+            if (!mobileNumber || !/^[0-9]{10}$/.test(mobileNumber)) {
                 mobileError.textContent = "Please enter a valid 10-digit phone number.";
                 return;
             }
@@ -90,18 +90,26 @@
                 const response = await fetch(`${BACKEND_URL}/auth/send-otp`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ phoneNumber })
+                    body: JSON.stringify({ phoneNumber: mobileNumber }) // ✅ Changed to phoneNumber
                 });
 
-                const data = await response.json();
-                if (response.ok) {
-                    otpSuccess.textContent = data.message || "OTP sent successfully!";
-                    document.getElementById("otpDisplay").textContent = "XXXXXX"; // Placeholder
-                    new bootstrap.Modal(document.getElementById("otpModal")).show();
-                    enableOtpInput();
-                } else {
-                    mobileError.textContent = data.message || "Failed to send OTP";
+                if (!response.ok) {
+                    let errorData;
+                    try {
+                        errorData = await response.json();
+                        mobileError.textContent = errorData.error || `Failed to send OTP (Status: ${response.status})`;
+                    } catch (jsonError) {
+                        const errorText = await response.text();
+                        mobileError.textContent = `Failed to send OTP (Status: ${response.status}). Server response: ${errorText || "No response body"}`;
+                    }
+                    return;
                 }
+
+                const data = await response.json();
+                otpSuccess.textContent = data.message || "OTP sent successfully!";
+                document.getElementById("otpDisplay").textContent = "XXXXXX"; // Placeholder
+                new bootstrap.Modal(document.getElementById("otpModal")).show();
+                enableOtpInput();
             } catch (error) {
                 mobileError.textContent = "Network error. Please try again.";
                 console.error("Error:", error);
@@ -109,7 +117,7 @@
         }
 
         async function verifyOtp() {
-            const phoneNumber = document.getElementById("mobileNumber").value.trim();
+            const mobileNumber = document.getElementById("mobileNumber").value.trim();
             const otp = document.getElementById("otp").value.trim();
             const otpError = document.getElementById("otpError");
             const otpSuccess = document.getElementById("otpSuccess");
@@ -124,17 +132,19 @@
                 const response = await fetch(`${BACKEND_URL}/auth/login/subscriber`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ phoneNumber, otp })
+                    body: JSON.stringify({ phoneNumber: mobileNumber, otp }) // ✅ Changed to phoneNumber
                 });
 
-                const data = await response.json();
-                if (response.ok) {
-                    otpSuccess.textContent = "Login successful!";
-                    localStorage.setItem("jwtToken", data.token);
-                    setTimeout(() => window.location.href = "customer-home.html", 1000);
-                } else {
-                    otpError.textContent = data.message || "Invalid OTP";
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    otpError.textContent = errorData.error || `Login failed (Status: ${response.status})`;
+                    return;
                 }
+
+                const data = await response.json();
+                otpSuccess.textContent = "Login successful!";
+                localStorage.setItem("jwtToken", data.token);
+                setTimeout(() => window.location.href = "customer-home.html", 1000);
             } catch (error) {
                 otpError.textContent = "Network error. Please try again.";
                 console.error("Error:", error);

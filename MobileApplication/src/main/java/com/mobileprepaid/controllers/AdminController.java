@@ -46,7 +46,7 @@ public class AdminController {
     private NotificationService notificationService;
     
     
- // =========================== DASHBOARD SUMMARY ===========================
+ //  DASHBOARD SUMMARY 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/dashboard")
     public ResponseEntity<Map<String, Object>> getDashboardSummary() {

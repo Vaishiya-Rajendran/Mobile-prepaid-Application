@@ -14,6 +14,10 @@
         .navbar {
             background-color: #321BC8 !important;
             border-bottom: 2px solid #321BC8;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
         }
 
         .navbar-brand {
@@ -25,6 +29,7 @@
             padding-top: 20px;
             background-color: #E3F2FD;
             position: relative;
+            margin-top: 80px; /* Adjusted to account for fixed navbar height */
         }
 
         .card {
@@ -84,10 +89,16 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Adjusted success message container */
+        #success-message {
+            margin-top: 80px; /* Ensure it appears below the fixed navbar */
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
+    <nav class="navbar navbar-expand-lg navbar-dark" id="mainNavbar">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Mobi.Comm</a>
             <div class="ms-auto">
@@ -96,7 +107,7 @@
         </div>
     </nav>
 
-    <div class="container recharge-container mt-5" id="rechargePage">
+    <div class="container recharge-container" id="rechargePage">
         <div class="loading-overlay" id="loadingOverlay">
             <div class="spinner"></div>
         </div>
@@ -113,7 +124,7 @@
         <div id="error-message" class="alert alert-danger mt-3" style="display: none;"></div>
     </div>
 
-    <div id="success-message" class="container mt-4" style="display: none;">
+    <div id="success-message" class="container" style="display: none;">
         <div class="alert alert-success" role="alert">
             <h4 class="alert-heading">Payment Successful!</h4>
             <p>Your recharge has been successfully processed.</p>
@@ -267,8 +278,18 @@
             errorElement.style.display = "block";
         }
 
-        function showLoading(show) {
-            document.getElementById("loadingOverlay").style.display = show ? "flex" : "none";
+        function showLoading(show, message = "Processing payment...") {
+            const overlay = document.getElementById("loadingOverlay");
+            overlay.style.display = show ? "flex" : "none";
+            if (show) {
+                const existingMessage = overlay.querySelector(".loading-message");
+                if (existingMessage) existingMessage.remove();
+                const messageElement = document.createElement("div");
+                messageElement.className = "loading-message";
+                messageElement.textContent = message;
+                messageElement.style.marginLeft = "10px";
+                overlay.appendChild(messageElement);
+            }
         }
 
         function proceedToPayment() {
@@ -300,7 +321,7 @@
             const modal = bootstrap.Modal.getInstance(document.getElementById("confirmPaymentModal"));
             modal.hide();
 
-            showLoading(true);
+            showLoading(true, "Initiating payment...");
             try {
                 // Step 1: Initiate recharge and create Razorpay order
                 const initiateResponse = await fetch(`${BACKEND_URL}/subscriber/recharge/initiate`, {
@@ -337,6 +358,7 @@
                     description: "Mobile Recharge Payment",
                     order_id: razorpayOrderId,
                     handler: async function (response) {
+                        showLoading(true, "Verifying payment...");
                         try {
                             // Step 3: Verify payment on the backend
                             const verifyResponse = await fetch(`${BACKEND_URL}/subscriber/recharge/verify`, {
@@ -360,7 +382,6 @@
                                 return;
                             }
 
-                            // Log the verifyData to debug
                             console.log("Payment verification successful. verifyData:", verifyData);
 
                             // Step 4: Display success message and invoice
@@ -398,7 +419,7 @@
                     },
                     prefill: {
                         contact: paymentData.mobileNumber,
-                        email: "customer@example.com" // You can fetch this from the profile if available
+                        email: "customer@example.com" // Fetch from profile if available
                     },
                     theme: {
                         color: "#321BC8"

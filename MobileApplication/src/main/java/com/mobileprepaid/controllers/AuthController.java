@@ -22,13 +22,6 @@ public class AuthController {
     private final AuthService authService;
 
 
-
-    // Register Subscriber
-//    @PostMapping("/register/subscriber")
-//    public ResponseEntity<Map<String, String>> registerSubscriber(@RequestBody SubscriberRegisterRequest request) {
-//        String message = authService.registerSubscriber(request);
-//        return ResponseEntity.ok(Map.of("message", message));
-//    }
     
     @PostMapping("/register/subscriber")
     public ResponseEntity<Map<String, String>> registerSubscriber(@RequestBody SubscriberRegisterRequest request) {

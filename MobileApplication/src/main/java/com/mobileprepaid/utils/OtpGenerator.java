@@ -13,15 +13,13 @@ public class OtpGenerator {
     private final Map<String, OtpEntry> otpStorage = new ConcurrentHashMap<>();
     private final Random random = new Random();
 
-    // ✅ Generate OTP and store it with expiration time
     public String generateOtp(String phoneNumber) {
         String otp = String.format("%06d", random.nextInt(1000000)); 
         otpStorage.put(phoneNumber, new OtpEntry(otp, LocalDateTime.now().plusMinutes(OTP_EXPIRATION_MINUTES)));
         System.out.println("Generated OTP for " + phoneNumber + ": " + otp); // Debug log
         return otp;
     }
-
-    // ✅ Validate OTP (check if it exists & is not expired)
+    
     public boolean validateOtp(String phoneNumber, String otp) {
         OtpEntry entry = otpStorage.get(phoneNumber);
         if (entry == null) {
@@ -37,13 +35,11 @@ public class OtpGenerator {
         return isValid;
     }
 
-    // ✅ Clear OTP after successful verification
     public void clearOtp(String phoneNumber) {
         otpStorage.remove(phoneNumber);
         System.out.println("OTP cleared for " + phoneNumber);
     }
 
-    // ✅ Internal class to store OTP and expiration time
     private static class OtpEntry {
         private final String otp;
         private final LocalDateTime expiryTime;
@@ -92,4 +88,3 @@ public class OtpGenerator {
 //        redisTemplate.delete(phoneNumber);
 //    }
 //}
-

@@ -83,12 +83,12 @@ public class PlanService {
         return planRepository.save(existingPlan);
     }
 
-    // ✅ Delete a plan
+    // Modified Delete a plan (Soft Delete)
     public void deletePlan(Long id) {
-        if (!planRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Plan not found");
-        }
-        planRepository.deleteById(id);
+        Plan plan = planRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Plan not found"));
+        plan.setStatus(PlanStatus.INACTIVE); // Soft delete by setting status to INACTIVE
+        planRepository.save(plan);
     }
 
     // ✅ Update Plan Status (ACTIVE ⇄ INACTIVE)

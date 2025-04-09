@@ -25,33 +25,101 @@
             font-size: 18px;
             padding: 10px 15px;
             transition: all 0.3s ease-in-out;
-            border-radius: 5px;
+            position: relative;
         }
 
         .navbar-nav .nav-link:hover,
         .navbar-nav .nav-link.active,
         .navbar-nav .nav-link:focus {
-            background-color: gold !important;
-            color: black !important;
-            border-radius: 5px;
+            color: white !important;
             text-decoration: none;
+            background: none !important;
         }
 
+        .navbar-nav .nav-link:hover::after,
+        .navbar-nav .nav-link.active::after,
+        .navbar-nav .nav-link:focus::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            background-color: gold;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: width 0.3s ease-in-out;
+        }
+
+        .navbar-nav .nav-link:hover::after {
+            width: 70%;
+        }
+
+        /* Enhanced Profile Icon and Dropdown */
         .profile-icon-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 45px;
-            height: 45px;
-            background-color: white;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ffffff, #e0e0e0); /* Subtle gradient */
             border-radius: 50%;
             text-align: center;
-            line-height: 45px;
+            line-height: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        }
+
+        .profile-icon-container:hover {
+            transform: scale(1.1); /* Slight scale on hover */
+            background: linear-gradient(135deg, #ffffff, #f0f0f0); /* Lighter gradient on hover */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
         }
 
         .profile-icon-container i {
-            font-size: 22px;
-            color: black;
+            font-size: 24px;
+            color: #321BC8; /* Match navbar color */
+        }
+
+        /* Dropdown Menu Styling */
+        .dropdown-menu {
+            background-color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Modern shadow */
+            padding: 10px 0;
+            animation: dropdownFade 0.3s ease-in-out; /* Smooth dropdown animation */
+        }
+
+        @keyframes dropdownFade {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-item {
+            color: #321BC8; /* Match navbar color */
+            font-weight: 500;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Space between icon and text */
+        }
+
+        .dropdown-item:hover {
+            background-color: #E3F2FD; /* Light blue background on hover */
+            color: #321BC8;
+            transform: translateX(5px); /* Slight shift on hover */
+        }
+
+        .dropdown-item i {
+            font-size: 18px;
+            color: gold; /* Gold icon color */
         }
 
         .container.carousel-container {
@@ -123,9 +191,8 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#indexContainer">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="#popularPlans">Popular Plans</a></li>
-                    <!-- <li class="nav-item"><a class="nav-link" href="#quickRecharge">Quick Recharge</a></li> -->
                     <li class="nav-item"><a class="nav-link" href="#support">Support</a></li>
                 </ul>
                 <div class="dropdown">
@@ -133,8 +200,8 @@
                         <i class="bi bi-person-circle"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                        <li><a class="dropdown-item" href="Admin/admin-login.html">Admin</a></li>
-                        <li><a class="dropdown-item" href="Subscriber/customer login.html">Subscriber</a></li>
+                        <li><a class="dropdown-item" href="Admin/admin-login.html"><i class="bi bi-shield-lock-fill"></i> Admin</a></li>
+                        <li><a class="dropdown-item" href="Subscriber/customer login.html"><i class="bi bi-person-fill"></i> Subscriber</a></li>
                     </ul>
                 </div>
             </div>
@@ -150,21 +217,21 @@
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="/assesst/images/mobile3.jpg" class="d-block w-100" alt="First Slide">
+                    <img src="/Frontend/assesst/images/mobile3.jpg" class="d-block w-100" alt="First Slide">
                     <div class="carousel-caption overlay">
                         <h2>Premium entertainment, incredible price!</h2>
                         <p>Recharge Now and enjoy the plan</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="/assesst/images/carousel3.webp" class="d-block w-100" alt="Second Slide">
+                    <img src="/Frontend/assesst/images/carousel3.webp" class="d-block w-100" alt="Second Slide">
                     <div class="carousel-caption overlay">
                         <h2>Unlimited Data & Calls</h2>
                         <p>Experience seamless connectivity.</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="/assesst/images/carousel1.jpg" class="d-block w-100" alt="Third Slide">
+                    <img src="/Frontend/assesst/images/carousel1.jpg" class="d-block w-100" alt="Third Slide">
                     <div class="carousel-caption overlay">
                         <h2>Best Offers for New Users</h2>
                         <p>Sign up today and get exclusive discounts.</p>
@@ -224,19 +291,6 @@
             </div>
         </div>
     </div>
-
-    <!-- <div class="container mt-4" id="quickRecharge" style="max-width: 600px;">
-        <h2 class="text-center">Quick Recharge</h2>
-        <form id="quickRechargeForm" class="mt-3" style="display: flex; flex-direction: column; align-items: center;">
-            <div class="mb-3" style="width: 100%;">
-                <label for="mobileNumber" class="form-label"><b>Mobile Number</b></label>
-                <input type="tel" class="form-control" id="mobileNumber" placeholder="Enter 10-digit mobile number" required>
-                <div id="mobileError" style="color: red; font-size: 14px; margin-top: 5px;"></div>
-                <div id="successMessage" style="color: green; font-size: 14px; margin-top: 5px; display: none;"></div>
-            </div>
-            <button type="button" onclick="initiateQuickRecharge()" class="btn btn-primary mt-2">Proceed</button>
-        </form>
-    </div> -->
 
     <div class="container mt-5" id="support">
         <br>
@@ -321,6 +375,7 @@
             const indexContainer = document.getElementById("indexContainer");
             const navbarHeight = navbar.offsetHeight;
             indexContainer.style.marginTop = `${navbarHeight + 20}px`;
+            updateActiveNavLink();
         });
 
         window.addEventListener("resize", function () {
@@ -328,6 +383,40 @@
             const indexContainer = document.getElementById("indexContainer");
             const navbarHeight = navbar.offsetHeight;
             indexContainer.style.marginTop = `${navbarHeight + 20}px`;
+        });
+
+        function updateActiveNavLink() {
+            const sections = document.querySelectorAll("div[id='indexContainer'], div[id='popularPlans'], div[id='support']");
+            const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+
+            let currentSection = "";
+            const scrollPosition = window.scrollY + 100;
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    currentSection = section.getAttribute("id");
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove("active");
+                const href = link.getAttribute("href").substring(1);
+                if (href === currentSection) {
+                    link.classList.add("active");
+                }
+            });
+        }
+
+        window.addEventListener("scroll", updateActiveNavLink);
+
+        document.querySelectorAll(".navbar-nav .nav-link").forEach(link => {
+            link.addEventListener("click", function () {
+                document.querySelectorAll(".navbar-nav .nav-link").forEach(l => l.classList.remove("active"));
+                this.classList.add("active");
+            });
         });
 
         function showLoading(show) {
@@ -353,11 +442,9 @@
             const mobileError = document.getElementById("mobileError");
             const successMessage = document.getElementById("successMessage");
 
-            // Clear previous messages
             mobileError.style.display = "none";
             successMessage.style.display = "none";
 
-            // Validate mobile number format
             if (!mobileNumber || !/^[0-9]{10}$/.test(mobileNumber)) {
                 showError("Please enter a valid 10-digit mobile number.");
                 return;
@@ -366,7 +453,6 @@
             showLoading(true);
 
             try {
-                // Step 1: Check if the mobile number is registered
                 const checkResponse = await fetch(`${BACKEND_URL}/subscriber/check/${mobileNumber}`, {
                     method: "GET",
                     headers: {
@@ -383,12 +469,11 @@
                     return;
                 }
 
-                // Step 2: For simplicity, use a default plan (e.g., ₹399 plan, ID: 1)
                 const rechargeData = {
                     mobileNumber: mobileNumber,
-                    planId: 1, // Default plan ID, adjust as needed
-                    amount: 399.00, // Default amount for ₹399 plan
-                    paymentMethod: "upi" // Default payment method for quick recharge
+                    planId: 1,
+                    amount: 399.00,
+                    paymentMethod: "upi"
                 };
 
                 const rechargeResponse = await fetch(`${BACKEND_URL}/subscriber/quick-recharge`, {
@@ -407,7 +492,7 @@
                 }
 
                 showSuccess("Recharge successful! Transaction ID: " + responseData.transactionId);
-                document.getElementById("mobileNumber").value = ""; // Clear input
+                document.getElementById("mobileNumber").value = "";
             } catch (error) {
                 showError("Error connecting to the server. Please try again later.");
                 console.error("Quick Recharge Error:", error);
